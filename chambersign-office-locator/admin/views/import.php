@@ -6,6 +6,7 @@
  */
 
 use ChamberSign\Locator\Admin\Import;
+use ChamberSign\Locator\Ajax\Geocode;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,6 +22,28 @@ $result = get_transient( 'csol_import_result_' . get_current_user_id() );
 if ( $result ) {
 	delete_transient( 'csol_import_result_' . get_current_user_id() );
 }
+
+$missing_count = count( Geocode::get_bureaux_missing_coordinates() );
+
+wp_enqueue_style( 'csol-admin', CSOL_PLUGIN_URL . 'admin/css/admin.css', array(), CSOL_VERSION );
+wp_enqueue_script( 'csol-admin-geocode-batch', CSOL_PLUGIN_URL . 'admin/js/geocode-batch.js', array(), CSOL_VERSION, true );
+wp_localize_script(
+	'csol-admin-geocode-batch',
+	'csolAdminBatch',
+	array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'action'  => Geocode::BATCH_ACTION,
+		'nonce'   => wp_create_nonce( Geocode::ACTION ),
+		'i18n'    => array(
+			'starting' => __( 'Démarrage du géocodage…', 'chambersign-office-locator' ),
+			/* translators: 1: remaining count, 2: succeeded count, 3: failed count */
+			'progress' => __( '%1$d bureau(x) restant(s)… (%2$d géocodé(s), %3$d en échec)', 'chambersign-office-locator' ),
+			/* translators: 1: remaining count that could not be geocoded */
+			'done'     => __( 'Terminé. %1$d bureau(x) n\'ont pas pu être géocodés automatiquement (adresse incomplète ou introuvable) : complétez-les manuellement dans la fiche du bureau.', 'chambersign-office-locator' ),
+			'error'    => __( 'Erreur pendant le géocodage. Réessayez.', 'chambersign-office-locator' ),
+		),
+	)
+);
 ?>
 <div class="wrap csol-admin-wrap">
 	<h1><?php esc_html_e( 'Import de bureaux d\'enregistrement', 'chambersign-office-locator' ); ?></h1>
@@ -74,4 +97,26 @@ if ( $result ) {
 		</table>
 		<?php submit_button( __( 'Importer', 'chambersign-office-locator' ) ); ?>
 	</form>
+
+	<hr />
+
+	<h2><?php esc_html_e( 'Géocodage automatique', 'chambersign-office-locator' ); ?></h2>
+	<?php if ( $missing_count > 0 ) : ?>
+		<p>
+			<?php
+			printf(
+				/* translators: %d: number of bureaus without coordinates */
+				esc_html( _n( '%d bureau publié n\'a pas de coordonnées GPS.', '%d bureaux publiés n\'ont pas de coordonnées GPS.', $missing_count, 'chambersign-office-locator' ) ),
+				(int) $missing_count
+			);
+			?>
+			<?php esc_html_e( 'Lancez le géocodage automatique (OpenStreetMap Nominatim) à partir de leur adresse, code postal et ville : le traitement se fait par petits lots pour respecter les limites du serveur, restez sur cette page jusqu\'à la fin.', 'chambersign-office-locator' ); ?>
+		</p>
+		<p>
+			<button type="button" id="csol_geocode_batch_button" class="button button-primary"><?php esc_html_e( 'Géocoder les bureaux manquants', 'chambersign-office-locator' ); ?></button>
+		</p>
+		<p id="csol_geocode_batch_status" class="csol-geocode-status" aria-live="polite"></p>
+	<?php else : ?>
+		<p><?php esc_html_e( 'Tous les bureaux publiés ont des coordonnées GPS.', 'chambersign-office-locator' ); ?></p>
+	<?php endif; ?>
 </div>
