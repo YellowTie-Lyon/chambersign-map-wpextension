@@ -217,8 +217,43 @@
 	};
 
 	CsolLocatorInstance.prototype.renderEmpty = function () {
-		this.listEl.innerHTML = '<p class="csol-list-empty">' + escapeHtml( csolLocator.i18n.noResults ) + '</p>';
+		var hasActiveFilters = ( this.searchInput && this.searchInput.value )
+			|| ( this.regionSelect && this.regionSelect.value )
+			|| ( this.departementSelect && this.departementSelect.value )
+			|| ( this.produitSelect && this.produitSelect.value );
+
+		var html = '<p class="csol-list-empty">' + escapeHtml( csolLocator.i18n.noResults ) + '</p>';
+
+		if ( hasActiveFilters ) {
+			html += '<button type="button" class="csol-btn csol-btn-secondary csol-reset-filters">' + escapeHtml( csolLocator.i18n.resetFilters ) + '</button>';
+		}
+
+		this.listEl.innerHTML = html;
 		this.countEl.textContent = '';
+
+		var resetButton = this.listEl.querySelector( '.csol-reset-filters' );
+		if ( resetButton ) {
+			var self = this;
+			resetButton.addEventListener( 'click', function () {
+				self.resetFilters();
+			} );
+		}
+	};
+
+	CsolLocatorInstance.prototype.resetFilters = function () {
+		if ( this.searchInput ) {
+			this.searchInput.value = '';
+		}
+		if ( this.regionSelect ) {
+			this.regionSelect.value = '';
+		}
+		if ( this.departementSelect ) {
+			this.departementSelect.value = '';
+		}
+		if ( this.produitSelect ) {
+			this.produitSelect.value = '';
+		}
+		this.search();
 	};
 
 	CsolLocatorInstance.prototype.buildPopupHtml = function ( bureau ) {

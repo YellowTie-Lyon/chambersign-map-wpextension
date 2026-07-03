@@ -96,10 +96,11 @@ class Assets {
 					'zoomBureau'      => (int) $settings['zoom_bureau'],
 				),
 				'i18n'          => array(
-					'noResults'  => __( 'Aucun bureau ne correspond à votre recherche.', 'chambersign-office-locator' ),
-					'loading'    => __( 'Chargement…', 'chambersign-office-locator' ),
-					'directions' => __( 'Itinéraire', 'chambersign-office-locator' ),
-					'viewOnMap'  => __( 'Voir sur la carte', 'chambersign-office-locator' ),
+					'noResults'    => __( 'Aucun bureau ne correspond à votre recherche. Vérifiez l\'orthographe ou essayez une recherche plus large (ville voisine, région).', 'chambersign-office-locator' ),
+					'loading'      => __( 'Chargement…', 'chambersign-office-locator' ),
+					'directions'   => __( 'Itinéraire', 'chambersign-office-locator' ),
+					'viewOnMap'    => __( 'Voir sur la carte', 'chambersign-office-locator' ),
+					'resetFilters' => __( 'Réinitialiser les filtres', 'chambersign-office-locator' ),
 				),
 			)
 		);

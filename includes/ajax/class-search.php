@@ -75,10 +75,6 @@ class Search {
 			'order'                  => 'ASC',
 		);
 
-		if ( '' !== $search ) {
-			$args['s'] = $search;
-		}
-
 		if ( '' !== $produit ) {
 			$args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				array(
@@ -89,8 +85,25 @@ class Search {
 			);
 		}
 
-		$query    = new \WP_Query( $args );
-		$bureaux  = array();
+		$search_filter = null;
+
+		if ( '' !== $search ) {
+			// La recherche WordPress native (`s`) ne porte que sur le titre et le
+			// contenu de l'article, or la ville/le code postal/l'adresse sont
+			// des meta : on élargit donc le WHERE pour matcher aussi ces champs.
+			$search_filter = function ( $where ) use ( $search ) {
+				return $this->add_search_where( $where, $search );
+			};
+			add_filter( 'posts_where', $search_filter );
+		}
+
+		$query = new \WP_Query( $args );
+
+		if ( null !== $search_filter ) {
+			remove_filter( 'posts_where', $search_filter );
+		}
+
+		$bureaux = array();
 
 		foreach ( $query->posts as $post ) {
 			$bureaux[] = $this->format_bureau( $post );
@@ -102,6 +115,40 @@ class Search {
 				'count'   => count( $bureaux ),
 			)
 		);
+	}
+
+	/**
+	 * Élargit le WHERE de la requête pour matcher le titre du bureau ainsi
+	 * que sa ville, son code postal, son adresse, sa région et son
+	 * département (recherche texte libre "trouve ma ville").
+	 *
+	 * @param string $where  Clause WHERE actuelle.
+	 * @param string $search Terme recherché.
+	 */
+	private function add_search_where( string $where, string $search ): string {
+		global $wpdb;
+
+		$like       = '%' . $wpdb->esc_like( $search ) . '%';
+		$meta_keys  = array(
+			Bureau::META_PREFIX . 'ville',
+			Bureau::META_PREFIX . 'code_postal',
+			Bureau::META_PREFIX . 'adresse',
+			Bureau::META_PREFIX . 'region',
+			Bureau::META_PREFIX . 'departement',
+		);
+		$placeholders = implode( ', ', array_fill( 0, count( $meta_keys ), '%s' ) );
+
+		$args = array_merge( array( $like ), $meta_keys, array( $like ) );
+
+		$where .= $wpdb->prepare(
+			" AND ( {$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.ID IN (
+				SELECT post_id FROM {$wpdb->postmeta}
+				WHERE meta_key IN ( {$placeholders} ) AND meta_value LIKE %s
+			) )",
+			$args
+		);
+
+		return $where;
 	}
 
 	/**

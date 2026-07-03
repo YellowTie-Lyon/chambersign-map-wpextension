@@ -113,7 +113,11 @@
 .csol-list-empty {
 	color: var(--csol-mid-grey);
 	font-size: 14px;
-	padding: 20px 0;
+	padding: 20px 0 8px;
+}
+
+.csol-reset-filters {
+	margin-bottom: 20px;
 }
 
 /* Carte bureau */
