@@ -116,11 +116,16 @@ class Assets {
 					'zoomBureau'      => (int) $settings['zoom_bureau'],
 				),
 				'i18n'          => array(
-					'noResults'    => __( 'Aucun bureau ne correspond à votre recherche. Vérifiez l\'orthographe ou essayez une recherche plus large (ville voisine, région).', 'chambersign-office-locator' ),
-					'loading'      => __( 'Chargement…', 'chambersign-office-locator' ),
-					'directions'   => __( 'Itinéraire', 'chambersign-office-locator' ),
-					'viewOnMap'    => __( 'Voir sur la carte', 'chambersign-office-locator' ),
-					'resetFilters' => __( 'Réinitialiser les filtres', 'chambersign-office-locator' ),
+					'noResults'         => __( 'Aucun bureau ne correspond à votre recherche. Vérifiez l\'orthographe ou essayez une recherche plus large (ville voisine, région).', 'chambersign-office-locator' ),
+					'loading'           => __( 'Chargement…', 'chambersign-office-locator' ),
+					'directions'        => __( 'Itinéraire', 'chambersign-office-locator' ),
+					'viewOnMap'         => __( 'Voir sur la carte', 'chambersign-office-locator' ),
+					'resetFilters'      => __( 'Réinitialiser les filtres', 'chambersign-office-locator' ),
+					'geolocSearching'   => __( 'Localisation en cours…', 'chambersign-office-locator' ),
+					'geolocActive'      => __( 'Bureaux triés par distance depuis votre position. Cliquez à nouveau pour désactiver.', 'chambersign-office-locator' ),
+					'geolocDenied'      => __( 'Localisation refusée ou indisponible.', 'chambersign-office-locator' ),
+					'geolocUnsupported' => __( 'La géolocalisation n\'est pas prise en charge par votre navigateur.', 'chambersign-office-locator' ),
+					'youAreHere'        => __( 'Vous êtes ici', 'chambersign-office-locator' ),
 				),
 			)
 		);

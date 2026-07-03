@@ -7,7 +7,8 @@ Développée par **YellowTie** pour **ChamberSign**.
 ## Fonctionnalités
 
 - **Carte interactive** OpenStreetMap/Leaflet (aucune dépendance à Google Maps), avec regroupement automatique des bureaux proches (Leaflet.markercluster) : clic sur une bulle pour zoomer et révéler les bureaux qu'elle contient.
-- **Recherche AJAX** en temps réel — texte libre, région, département, produit — sans rechargement de page.
+- **Recherche AJAX** en temps réel — texte libre (ville, code postal, adresse, bureau), région, produit — sans rechargement de page.
+- **"Autour de moi"** : géolocalisation navigateur, tri des résultats par distance (persiste tant qu'elle est active, même en changeant de filtre).
 - **Fiches bureaux compactes** : nom, adresse, téléphone, site web, produits proposés, bouton itinéraire.
 - **Gestion complète en back-office** :
   - Custom Post Type *Bureaux d'enregistrement* (coordonnées GPS, contact, horaires, statut actif/inactif).

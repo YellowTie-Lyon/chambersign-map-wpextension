@@ -29,9 +29,8 @@ class Shortcode {
 	public function render(): string {
 		( new Assets() )->enqueue();
 
-		$regions      = $this->get_distinct_meta_values( 'region' );
-		$departements = $this->get_distinct_meta_values( 'departement' );
-		$produits     = get_terms(
+		$regions  = $this->get_distinct_meta_values( 'region' );
+		$produits = get_terms(
 			array(
 				'taxonomy'   => Produit::TAXONOMY,
 				'hide_empty' => true,

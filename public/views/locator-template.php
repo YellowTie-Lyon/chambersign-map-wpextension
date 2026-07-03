@@ -4,7 +4,6 @@
  * [chambersign_locator].
  *
  * @var array<int, string>     $regions
- * @var array<int, string>     $departements
  * @var array<int, \WP_Term>   $produits
  * @package ChamberSign\Locator
  */
@@ -32,6 +31,10 @@ $csol_id = 'csol-locator-' . $csol_instance;
 			/>
 		</div>
 
+		<button type="button" class="csol-btn csol-btn-secondary csol-geoloc-button" id="<?php echo esc_attr( $csol_id ); ?>-geoloc">
+			<?php esc_html_e( 'Autour de moi', 'chambersign-office-locator' ); ?>
+		</button>
+
 		<div class="csol-filter">
 			<label for="<?php echo esc_attr( $csol_id ); ?>-region" class="screen-reader-text">
 				<?php esc_html_e( 'Région', 'chambersign-office-locator' ); ?>
@@ -40,18 +43,6 @@ $csol_id = 'csol-locator-' . $csol_instance;
 				<option value=""><?php esc_html_e( 'Toutes les régions', 'chambersign-office-locator' ); ?></option>
 				<?php foreach ( $regions as $region ) : ?>
 					<option value="<?php echo esc_attr( $region ); ?>"><?php echo esc_html( $region ); ?></option>
-				<?php endforeach; ?>
-			</select>
-		</div>
-
-		<div class="csol-filter">
-			<label for="<?php echo esc_attr( $csol_id ); ?>-departement" class="screen-reader-text">
-				<?php esc_html_e( 'Département', 'chambersign-office-locator' ); ?>
-			</label>
-			<select id="<?php echo esc_attr( $csol_id ); ?>-departement" class="csol-select csol-filter-departement">
-				<option value=""><?php esc_html_e( 'Tous les départements', 'chambersign-office-locator' ); ?></option>
-				<?php foreach ( $departements as $departement ) : ?>
-					<option value="<?php echo esc_attr( $departement ); ?>"><?php echo esc_html( $departement ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>
@@ -68,6 +59,8 @@ $csol_id = 'csol-locator-' . $csol_instance;
 			</select>
 		</div>
 	</div>
+
+	<p class="csol-geoloc-status" id="<?php echo esc_attr( $csol_id ); ?>-geoloc-status" aria-live="polite"></p>
 
 	<div class="csol-locator-body">
 		<div class="csol-locator-map-col">

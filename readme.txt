@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Fonctionnalités :
 * Custom Post Type "Bureaux d'enregistrement" avec coordonnées GPS, coordonnées de contact et statut actif/inactif.
 * Taxonomie "Produits" (RGS, eIDAS, Signature Électronique, Cachet Serveur…) en relation many-to-many avec les bureaux.
 * Carte interactive OpenStreetMap (Leaflet), sans dépendance à Google Maps, avec regroupement automatique des bureaux proches (Leaflet.markercluster).
-* Recherche AJAX (texte libre, région, département, produit) sans rechargement de page.
+* Recherche AJAX (texte libre, région, produit) sans rechargement de page, avec géolocalisation "Autour de moi" (tri par distance).
 * Import/mise à jour en masse des bureaux depuis un fichier CSV ou XLSX.
 * Aide au géocodage (Nominatim/OpenStreetMap) dans l'administration.
 * Réglages de la carte (position, zooms par défaut, fond de carte, icône du marqueur) via l'API Settings de WordPress.
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.3.0 =
+* Refonte de la barre de filtres : suppression du filtre Département (redondant avec la recherche texte, qui couvre déjà ville/code postal/département) et ajout d'un bouton "Autour de moi" (géolocalisation navigateur). Les résultats sont alors triés par distance, avec la distance affichée sur chaque bureau, et restent triés ainsi tant que la géolocalisation est active, même en changeant de filtre.
 
 = 1.2.0 =
 * Ajout du regroupement automatique des bureaux proches sur la carte (Leaflet.markercluster) : bulle avec le nombre de bureaux, clic pour zoomer et les révéler.

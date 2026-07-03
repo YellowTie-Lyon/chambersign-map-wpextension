@@ -40,6 +40,42 @@
 		}
 	);
 
+	// Icône "Ma position" (bouton Autour de moi) : même mécanisme L.icon(),
+	// bleu pour se distinguer des marqueurs bureaux.
+	var USER_LOCATION_ICON = L.icon( {
+		iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iNyIgZmlsbD0iIzFBNzNFOCIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=',
+		iconSize: [ 20, 20 ],
+		iconAnchor: [ 10, 10 ],
+		popupAnchor: [ 0, -12 ],
+	} );
+
+	/**
+	 * Distance à vol d'oiseau entre deux points (formule de Haversine), en km.
+	 */
+	function haversineDistanceKm( lat1, lng1, lat2, lng2 ) {
+		var toRad = function ( deg ) {
+			return deg * Math.PI / 180;
+		};
+		var earthRadiusKm = 6371;
+		var dLat = toRad( lat2 - lat1 );
+		var dLng = toRad( lng2 - lng1 );
+		var a = Math.sin( dLat / 2 ) * Math.sin( dLat / 2 ) +
+			Math.cos( toRad( lat1 ) ) * Math.cos( toRad( lat2 ) ) *
+			Math.sin( dLng / 2 ) * Math.sin( dLng / 2 );
+		var c = 2 * Math.atan2( Math.sqrt( a ), Math.sqrt( 1 - a ) );
+		return earthRadiusKm * c;
+	}
+
+	/**
+	 * Formate une distance en km pour l'affichage (1 décimale sous 10 km).
+	 */
+	function formatDistanceKm( km ) {
+		if ( km < 10 ) {
+			return km.toFixed( 1 ).replace( '.', ',' ) + ' km';
+		}
+		return Math.round( km ) + ' km';
+	}
+
 	/**
 	 * Construit l'icône d'une bulle de regroupement (nombre de bureaux
 	 * qu'elle contient) sous forme de SVG généré à la volée, affiché via
@@ -118,14 +154,19 @@
 		this.countEl = document.getElementById( this.id + '-count' );
 		this.searchInput = root.querySelector( '.csol-search-input' );
 		this.regionSelect = root.querySelector( '.csol-filter-region' );
-		this.departementSelect = root.querySelector( '.csol-filter-departement' );
 		this.produitSelect = root.querySelector( '.csol-filter-produit' );
+		this.geolocButton = root.querySelector( '.csol-geoloc-button' );
+		this.geolocStatusEl = document.getElementById( this.id + '-geoloc-status' );
 
 		this.markers = {};
 		this.activeCardId = null;
+		this.lastBureaux = [];
+		this.userLocation = null;
+		this.userMarker = null;
 
 		this.initMap();
 		this.bindFilters();
+		this.bindGeoloc();
 		this.search();
 	}
 
@@ -171,16 +212,107 @@
 				self.search();
 			} );
 		}
-		if ( this.departementSelect ) {
-			this.departementSelect.addEventListener( 'change', function () {
-				self.search();
-			} );
-		}
 		if ( this.produitSelect ) {
 			this.produitSelect.addEventListener( 'change', function () {
 				self.search();
 			} );
 		}
+	};
+
+	CsolLocatorInstance.prototype.bindGeoloc = function () {
+		var self = this;
+
+		if ( ! this.geolocButton ) {
+			return;
+		}
+
+		this.geolocButton.addEventListener( 'click', function () {
+			if ( self.userLocation ) {
+				self.deactivateGeolocation();
+			} else {
+				self.activateGeolocation();
+			}
+		} );
+	};
+
+	CsolLocatorInstance.prototype.activateGeolocation = function () {
+		var self = this;
+
+		if ( ! navigator.geolocation ) {
+			this.geolocStatusEl.textContent = csolLocator.i18n.geolocUnsupported;
+			return;
+		}
+
+		this.geolocButton.disabled = true;
+		this.geolocStatusEl.textContent = csolLocator.i18n.geolocSearching;
+
+		navigator.geolocation.getCurrentPosition(
+			function ( position ) {
+				self.userLocation = {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude,
+				};
+				self.geolocButton.disabled = false;
+				self.geolocButton.classList.add( 'is-active' );
+				self.geolocStatusEl.textContent = csolLocator.i18n.geolocActive;
+				self.placeUserMarker();
+				self.render( self.lastBureaux );
+			},
+			function () {
+				self.geolocButton.disabled = false;
+				self.geolocStatusEl.textContent = csolLocator.i18n.geolocDenied;
+			},
+			{ enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+		);
+	};
+
+	CsolLocatorInstance.prototype.deactivateGeolocation = function () {
+		this.userLocation = null;
+		this.geolocButton.classList.remove( 'is-active' );
+		this.geolocStatusEl.textContent = '';
+
+		if ( this.userMarker ) {
+			this.map.removeLayer( this.userMarker );
+			this.userMarker = null;
+		}
+
+		this.render( this.lastBureaux );
+	};
+
+	CsolLocatorInstance.prototype.placeUserMarker = function () {
+		if ( this.userMarker ) {
+			this.map.removeLayer( this.userMarker );
+		}
+
+		// Marqueur "ma position" ajouté directement à la carte, hors du
+		// groupe de clustering : il ne doit jamais être regroupé avec les
+		// bureaux.
+		this.userMarker = L.marker( [ this.userLocation.lat, this.userLocation.lng ], {
+			icon: USER_LOCATION_ICON,
+			zIndexOffset: 1000,
+			keyboard: false,
+		} ).addTo( this.map );
+		this.userMarker.bindPopup( escapeHtml( csolLocator.i18n.youAreHere ) );
+	};
+
+	CsolLocatorInstance.prototype.sortByDistance = function ( bureaux ) {
+		var self = this;
+
+		bureaux.forEach( function ( bureau ) {
+			bureau._distanceKm = ( bureau.lat && bureau.lng )
+				? haversineDistanceKm( self.userLocation.lat, self.userLocation.lng, bureau.lat, bureau.lng )
+				: null;
+		} );
+
+		return bureaux.slice().sort( function ( a, b ) {
+			if ( null === a._distanceKm ) {
+				return 1;
+			}
+			if ( null === b._distanceKm ) {
+				return -1;
+			}
+			return a._distanceKm - b._distanceKm;
+		} );
 	};
 
 	CsolLocatorInstance.prototype.search = function () {
@@ -193,7 +325,6 @@
 		formData.append( 'nonce', csolLocator.nonce );
 		formData.append( 'search', this.searchInput ? this.searchInput.value : '' );
 		formData.append( 'region', this.regionSelect ? this.regionSelect.value : '' );
-		formData.append( 'departement', this.departementSelect ? this.departementSelect.value : '' );
 		formData.append( 'produit', this.produitSelect ? this.produitSelect.value : '' );
 
 		fetch( csolLocator.ajaxUrl, {
@@ -217,9 +348,20 @@
 	};
 
 	CsolLocatorInstance.prototype.render = function ( bureaux ) {
+		this.lastBureaux = bureaux;
 		this.markersLayer.clearLayers();
 		this.markers = {};
 		this.activeCardId = null;
+
+		if ( this.userLocation ) {
+			bureaux = this.sortByDistance( bureaux );
+		} else {
+			// Nettoie une distance calculée lors d'un précédent rendu avec
+			// géolocalisation active, pour ne pas l'afficher par erreur.
+			bureaux.forEach( function ( bureau ) {
+				bureau._distanceKm = null;
+			} );
+		}
 
 		this.countEl.textContent = bureaux.length + ' ' + ( bureaux.length > 1 ? 'bureaux' : 'bureau' );
 
@@ -230,7 +372,7 @@
 
 		var self = this;
 		var listHtml = '';
-		var bounds = [];
+		var bounds = this.userLocation ? [ [ this.userLocation.lat, this.userLocation.lng ] ] : [];
 
 		bureaux.forEach( function ( bureau ) {
 			listHtml += self.buildCardHtml( bureau );
@@ -260,7 +402,6 @@
 	CsolLocatorInstance.prototype.renderEmpty = function () {
 		var hasActiveFilters = ( this.searchInput && this.searchInput.value )
 			|| ( this.regionSelect && this.regionSelect.value )
-			|| ( this.departementSelect && this.departementSelect.value )
 			|| ( this.produitSelect && this.produitSelect.value );
 
 		var html = '<p class="csol-list-empty">' + escapeHtml( csolLocator.i18n.noResults ) + '</p>';
@@ -287,9 +428,6 @@
 		}
 		if ( this.regionSelect ) {
 			this.regionSelect.value = '';
-		}
-		if ( this.departementSelect ) {
-			this.departementSelect.value = '';
 		}
 		if ( this.produitSelect ) {
 			this.produitSelect.value = '';
@@ -337,10 +475,14 @@
 
 		var directionsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent( bureau.lat + ',' + bureau.lng );
 
+		var distanceHtml = ( 'number' === typeof bureau._distanceKm )
+			? ' <span class="csol-card-distance">&middot; ' + escapeHtml( formatDistanceKm( bureau._distanceKm ) ) + '</span>'
+			: '';
+
 		return (
 			'<article class="csol-card" id="' + this.id + '-card-' + bureau.id + '" data-bureau-id="' + bureau.id + '">' +
 				'<h3 class="csol-card-title">' + escapeHtml( bureau.title ) + '</h3>' +
-				'<p class="csol-card-location">' + escapeHtml( bureau.ville ) + ( bureau.region ? ' &middot; ' + escapeHtml( bureau.region ) : '' ) + '</p>' +
+				'<p class="csol-card-location">' + escapeHtml( bureau.ville ) + ( bureau.region ? ' &middot; ' + escapeHtml( bureau.region ) : '' ) + distanceHtml + '</p>' +
 				( bureau.adresse ? '<p class="csol-card-adresse">' + escapeHtml( bureau.adresse ) + '</p>' : '' ) +
 				contactHtml +
 				produitsHtml +
