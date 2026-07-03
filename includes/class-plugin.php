@@ -8,6 +8,7 @@ use ChamberSign\Locator\Admin\Settings;
 use ChamberSign\Locator\Admin\Meta_Boxes;
 use ChamberSign\Locator\Admin\Import;
 use ChamberSign\Locator\Admin\List_Columns;
+use ChamberSign\Locator\Admin\Marker_Icon;
 use ChamberSign\Locator\Ajax\Search;
 use ChamberSign\Locator\Ajax\Geocode;
 use ChamberSign\Locator\Front\Shortcode;
@@ -60,6 +61,7 @@ final class Plugin {
 			( new Meta_Boxes() )->register_hooks();
 			( new Import() )->register_hooks();
 			( new List_Columns() )->register_hooks();
+			( new Marker_Icon() )->register_hooks();
 		}
 
 		( new Search() )->register_hooks();

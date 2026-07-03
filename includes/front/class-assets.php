@@ -1,6 +1,7 @@
 <?php
 namespace ChamberSign\Locator\Front;
 
+use ChamberSign\Locator\Admin\Marker_Icon;
 use ChamberSign\Locator\Admin\Settings;
 use ChamberSign\Locator\Ajax\Search;
 
@@ -75,15 +76,18 @@ class Assets {
 		wp_enqueue_script( 'csol-locator' );
 
 		$settings = Settings::get_settings();
+		$tile     = Settings::get_active_tile_provider();
 
 		wp_localize_script(
 			'csol-locator',
 			'csolLocator',
 			array(
-				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
-				'action'   => Search::ACTION,
-				'nonce'    => wp_create_nonce( Search::ACTION ),
-				'settings' => array(
+				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+				'action'        => Search::ACTION,
+				'nonce'         => wp_create_nonce( Search::ACTION ),
+				'markerIconUrl' => Marker_Icon::get_icon_url(),
+				'tile'          => $tile,
+				'settings'      => array(
 					'defaultLat'      => (float) $settings['default_lat'],
 					'defaultLng'      => (float) $settings['default_lng'],
 					'zoomFrance'      => (int) $settings['zoom_france'],
@@ -91,7 +95,7 @@ class Assets {
 					'zoomDepartement' => (int) $settings['zoom_departement'],
 					'zoomBureau'      => (int) $settings['zoom_bureau'],
 				),
-				'i18n'     => array(
+				'i18n'          => array(
 					'noResults'  => __( 'Aucun bureau ne correspond à votre recherche.', 'chambersign-office-locator' ),
 					'loading'    => __( 'Chargement…', 'chambersign-office-locator' ),
 					'directions' => __( 'Itinéraire', 'chambersign-office-locator' ),

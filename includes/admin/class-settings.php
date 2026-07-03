@@ -6,19 +6,50 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Page Réglages du plugin (bloc Documentation + bloc Carte), via l'API
+ * Page Réglages du plugin (Documentation, Carte, Apparence), via l'API
  * Settings de WordPress.
  */
 class Settings {
 
-	public const OPTION_NAME = 'csol_settings';
+	public const OPTION_NAME  = 'csol_settings';
 	public const OPTION_GROUP = 'csol_settings_group';
 	public const PAGE_SLUG    = 'chambersign-locator-settings';
 
 	/**
-	 * Valeurs par défaut des réglages carte.
+	 * Fonds de carte proposés : URL du tuilage (compatible Leaflet.tileLayer)
+	 * et attribution associée. Tous libres d'accès, sans clé API.
 	 *
-	 * @return array<string, float|int>
+	 * @return array<string, array{label: string, url: string, attribution: string}>
+	 */
+	public static function get_tile_providers(): array {
+		return array(
+			'osm'            => array(
+				'label'       => __( 'OpenStreetMap (standard)', 'chambersign-office-locator' ),
+				'url'         => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			),
+			'carto_voyager'  => array(
+				'label'       => __( 'CartoDB Voyager (couleurs douces)', 'chambersign-office-locator' ),
+				'url'         => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+			),
+			'carto_positron' => array(
+				'label'       => __( 'CartoDB Positron (clair, épuré)', 'chambersign-office-locator' ),
+				'url'         => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+			),
+			'carto_dark'     => array(
+				'label'       => __( 'CartoDB Dark Matter (sombre)', 'chambersign-office-locator' ),
+				'url'         => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+			),
+		);
+	}
+
+	/**
+	 * Valeurs par défaut des réglages.
+	 *
+	 * @return array<string, float|int|string>
 	 */
 	public static function get_defaults(): array {
 		return array(
@@ -28,18 +59,35 @@ class Settings {
 			'zoom_region'      => 8,
 			'zoom_departement' => 10,
 			'zoom_bureau'      => 14,
+			'tile_provider'    => 'osm',
 		);
 	}
 
 	/**
 	 * Retourne les réglages actuels, fusionnés avec les valeurs par défaut.
 	 *
-	 * @return array<string, float|int>
+	 * @return array<string, float|int|string>
 	 */
 	public static function get_settings(): array {
 		$saved = get_option( self::OPTION_NAME, array() );
 
 		return wp_parse_args( is_array( $saved ) ? $saved : array(), self::get_defaults() );
+	}
+
+	/**
+	 * Retourne l'URL et l'attribution du fond de carte actuellement choisi.
+	 *
+	 * @return array{url: string, attribution: string}
+	 */
+	public static function get_active_tile_provider(): array {
+		$settings  = self::get_settings();
+		$providers = self::get_tile_providers();
+		$key       = isset( $providers[ $settings['tile_provider'] ] ) ? $settings['tile_provider'] : 'osm';
+
+		return array(
+			'url'         => $providers[ $key ]['url'],
+			'attribution' => $providers[ $key ]['attribution'],
+		);
 	}
 
 	/**
@@ -80,10 +128,10 @@ class Settings {
 		$fields = array(
 			'default_lat'      => __( 'Latitude par défaut', 'chambersign-office-locator' ),
 			'default_lng'      => __( 'Longitude par défaut', 'chambersign-office-locator' ),
-			'zoom_france'      => __( 'Zoom France', 'chambersign-office-locator' ),
-			'zoom_region'      => __( 'Zoom Région', 'chambersign-office-locator' ),
-			'zoom_departement' => __( 'Zoom Département', 'chambersign-office-locator' ),
-			'zoom_bureau'      => __( 'Zoom Bureau', 'chambersign-office-locator' ),
+			'zoom_france'      => __( 'Zoom France (vue initiale)', 'chambersign-office-locator' ),
+			'zoom_region'      => __( 'Zoom Région (plusieurs résultats)', 'chambersign-office-locator' ),
+			'zoom_departement' => __( 'Zoom Département (un seul résultat)', 'chambersign-office-locator' ),
+			'zoom_bureau'      => __( 'Zoom Bureau (bureau sélectionné)', 'chambersign-office-locator' ),
 		);
 
 		foreach ( $fields as $key => $label ) {
@@ -96,6 +144,21 @@ class Settings {
 				array( 'key' => $key )
 			);
 		}
+
+		add_settings_section(
+			'csol_section_apparence',
+			__( 'Apparence', 'chambersign-office-locator' ),
+			array( $this, 'render_apparence_section_intro' ),
+			self::PAGE_SLUG
+		);
+
+		add_settings_field(
+			'csol_field_tile_provider',
+			__( 'Fond de carte', 'chambersign-office-locator' ),
+			array( $this, 'render_tile_provider_field' ),
+			self::PAGE_SLUG,
+			'csol_section_apparence'
+		);
 	}
 
 	/**
@@ -103,7 +166,7 @@ class Settings {
 	 *
 	 * @param array<string, mixed> $input Valeurs soumises.
 	 *
-	 * @return array<string, float|int>
+	 * @return array<string, float|int|string>
 	 */
 	public function sanitize_settings( $input ): array {
 		$defaults = self::get_defaults();
@@ -113,9 +176,13 @@ class Settings {
 		$output['default_lng'] = isset( $input['default_lng'] ) ? (float) $input['default_lng'] : $defaults['default_lng'];
 
 		foreach ( array( 'zoom_france', 'zoom_region', 'zoom_departement', 'zoom_bureau' ) as $zoom_key ) {
-			$value                 = isset( $input[ $zoom_key ] ) ? absint( $input[ $zoom_key ] ) : $defaults[ $zoom_key ];
-			$output[ $zoom_key ]   = max( 0, min( 19, $value ) );
+			$value               = isset( $input[ $zoom_key ] ) ? absint( $input[ $zoom_key ] ) : $defaults[ $zoom_key ];
+			$output[ $zoom_key ] = max( 0, min( 19, $value ) );
 		}
+
+		$providers             = self::get_tile_providers();
+		$tile_provider          = isset( $input['tile_provider'] ) ? sanitize_key( $input['tile_provider'] ) : $defaults['tile_provider'];
+		$output['tile_provider'] = isset( $providers[ $tile_provider ] ) ? $tile_provider : $defaults['tile_provider'];
 
 		return $output;
 	}
@@ -132,6 +199,13 @@ class Settings {
 	 */
 	public function render_carte_section_intro(): void {
 		echo '<p>' . esc_html__( 'Ces paramètres définissent le centrage et le niveau de zoom initiaux de la carte, ainsi que les niveaux de zoom appliqués lors d\'une sélection.', 'chambersign-office-locator' ) . '</p>';
+	}
+
+	/**
+	 * Affiche l'introduction du bloc Apparence.
+	 */
+	public function render_apparence_section_intro(): void {
+		echo '<p>' . esc_html__( 'Fond de carte et icône du marqueur affichés sur le localisateur.', 'chambersign-office-locator' ) . '</p>';
 	}
 
 	/**
@@ -153,6 +227,24 @@ class Settings {
 			value="<?php echo esc_attr( $value ); ?>"
 			class="regular-text"
 		/>
+		<?php
+	}
+
+	/**
+	 * Affiche le sélecteur de fond de carte.
+	 */
+	public function render_tile_provider_field(): void {
+		$settings = self::get_settings();
+		$current  = $settings['tile_provider'];
+		?>
+		<select id="csol_field_tile_provider" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[tile_provider]">
+			<?php foreach ( self::get_tile_providers() as $key => $provider ) : ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $current, $key ); ?>>
+					<?php echo esc_html( $provider['label'] ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<p class="description"><?php esc_html_e( 'Fonds de carte libres d\'accès, sans clé API ni service payant.', 'chambersign-office-locator' ); ?></p>
 		<?php
 	}
 }

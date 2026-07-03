@@ -3,7 +3,7 @@
  * Plugin Name:       ChamberSign Office Locator
  * Plugin URI:        https://www.chambersign.fr/
  * Description:       Permet aux visiteurs de trouver le bureau d'enregistrement ChamberSign le plus proche pour retirer leur certificat. Carte OpenStreetMap/Leaflet, recherche AJAX, gestion des bureaux et des produits associés.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            YellowTie
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Sortie si accès direct.
 }
 
-define( 'CSOL_VERSION', '1.0.0' );
+define( 'CSOL_VERSION', '1.1.0' );
 define( 'CSOL_PLUGIN_FILE', __FILE__ );
 define( 'CSOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CSOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

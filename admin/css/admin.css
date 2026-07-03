@@ -64,3 +64,15 @@
 	padding: 16px;
 	margin-top: 16px;
 }
+
+.csol-marker-icon-preview {
+	width: 40px;
+	height: 40px;
+	padding: 6px;
+	background: #EFEFEF;
+	border-radius: 6px;
+}
+
+.csol-icon-upload-form {
+	margin-top: 16px;
+}

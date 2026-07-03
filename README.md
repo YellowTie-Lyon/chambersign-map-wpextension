@@ -8,11 +8,11 @@ Développée par **YellowTie** pour **ChamberSign**.
 
 - **Carte interactive** OpenStreetMap/Leaflet (aucune dépendance à Google Maps).
 - **Recherche AJAX** en temps réel — texte libre, région, département, produit — sans rechargement de page.
-- **Fiches bureaux** : nom, adresse, téléphone, site web, horaires, produits proposés, bouton itinéraire.
+- **Fiches bureaux compactes** : nom, adresse, téléphone, site web, produits proposés, bouton itinéraire.
 - **Gestion complète en back-office** :
-  - Custom Post Type *Bureaux d'enregistrement* (coordonnées GPS, contact, statut actif/inactif).
+  - Custom Post Type *Bureaux d'enregistrement* (coordonnées GPS, contact, horaires, statut actif/inactif).
   - Taxonomie *Produits* (RGS, eIDAS, Signature Électronique, Cachet Serveur…) en relation many-to-many avec les bureaux.
-  - Page Réglages (position et niveaux de zoom par défaut de la carte) via l'API Settings de WordPress.
+  - Page Réglages (position/zooms de la carte, fond de carte, icône du marqueur) via l'API Settings de WordPress.
 - **Import en masse** de bureaux depuis un fichier CSV ou XLSX, avec mise à jour des bureaux existants.
 - **Géocodage** des adresses via OpenStreetMap Nominatim : au cas par cas depuis la fiche d'un bureau, ou en masse depuis l'écran d'import pour traiter de gros volumes.
 - **Design** conforme à la charte graphique ChamberSign (couleurs, typographie Poppins), responsive mobile/tablette.
@@ -52,7 +52,10 @@ Si un bureau n'a pas de latitude/longitude, un bouton **Géocoder depuis l'adres
 
 ### Réglages de la carte
 
-Depuis **ChamberSign Locator > Réglages** : position par défaut de la carte (latitude/longitude) et niveaux de zoom appliqués (France, région, département, sélection d'un bureau).
+Depuis **ChamberSign Locator > Réglages** :
+- Position par défaut de la carte (latitude/longitude) et niveaux de zoom appliqués (France, région, département, sélection d'un bureau).
+- Fond de carte : OpenStreetMap standard, ou CartoDB Voyager/Positron/Dark Matter (tuiles libres, sans clé API).
+- Icône personnalisée du marqueur (SVG, 100 Ko max) en remplacement du pin par défaut.
 
 ## Structure du projet
 

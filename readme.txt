@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ Fonctionnalités :
 * Recherche AJAX (texte libre, région, département, produit) sans rechargement de page.
 * Import/mise à jour en masse des bureaux depuis un fichier CSV ou XLSX.
 * Aide au géocodage (Nominatim/OpenStreetMap) dans l'administration.
-* Réglages de la carte (position et zooms par défaut) via l'API Settings de WordPress.
+* Réglages de la carte (position, zooms par défaut, fond de carte, icône du marqueur) via l'API Settings de WordPress.
 * Design conforme à la charte graphique ChamberSign (couleurs, typographie Poppins), responsive mobile/tablette.
 * Compatible Elementor via le widget Shortcode.
 
@@ -48,6 +48,11 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.1.0 =
+* Ajout d'un sélecteur de fond de carte (OpenStreetMap, CartoDB Voyager/Positron/Dark Matter).
+* Ajout de l'upload d'une icône de marqueur personnalisée (SVG) dans les réglages.
+* Cartes bureau plus compactes dans la liste des résultats.
 
 = 1.0.0 =
 * Version initiale.
