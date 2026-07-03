@@ -1,0 +1,66 @@
+/* ChamberSign Office Locator - styles admin */
+
+.csol-admin-wrap .csol-dashboard-cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin: 24px 0;
+}
+
+.csol-dashboard-card {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-left: 4px solid #D21034;
+	border-radius: 6px;
+	padding: 20px;
+	min-width: 220px;
+	flex: 1 1 220px;
+}
+
+.csol-dashboard-card-number {
+	display: block;
+	font-size: 32px;
+	font-weight: 800;
+	color: #373839;
+}
+
+.csol-dashboard-card-label {
+	display: block;
+	color: #87888A;
+	margin: 4px 0 12px;
+}
+
+.csol-meta-box .csol-geocode-status {
+	font-style: italic;
+	color: #87888A;
+}
+
+.csol-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.csol-badge-active {
+	background: #e6f4ea;
+	color: #1e7e34;
+}
+
+.csol-badge-inactive {
+	background: #F9E2E7;
+	color: #D21034;
+}
+
+.csol-import-table {
+	margin-top: 16px;
+}
+
+.csol-import-results {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	padding: 16px;
+	margin-top: 16px;
+}

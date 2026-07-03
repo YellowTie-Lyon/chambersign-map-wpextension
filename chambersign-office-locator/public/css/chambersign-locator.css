@@ -1,0 +1,277 @@
+/**
+ * ChamberSign Office Locator - styles front-end
+ * Charte graphique ChamberSign : rouge D21034, gris foncé 373839,
+ * gris moyen 87888A, rose clair F9E2E7, gris clair EFEFEF. Police Poppins.
+ */
+
+.csol-locator {
+	--csol-red: #D21034;
+	--csol-dark-grey: #373839;
+	--csol-mid-grey: #87888A;
+	--csol-light-pink: #F9E2E7;
+	--csol-light-grey: #EFEFEF;
+
+	font-family: 'Poppins', sans-serif;
+	color: var(--csol-dark-grey);
+	box-sizing: border-box;
+}
+
+.csol-locator *,
+.csol-locator *::before,
+.csol-locator *::after {
+	box-sizing: inherit;
+}
+
+.csol-locator .screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	white-space: nowrap;
+}
+
+/* Filtres */
+
+.csol-locator-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 20px;
+}
+
+.csol-filter {
+	flex: 1 1 200px;
+}
+
+.csol-filter-search {
+	flex: 2 1 280px;
+}
+
+.csol-input,
+.csol-select {
+	width: 100%;
+	padding: 10px 14px;
+	border: 1px solid var(--csol-light-grey);
+	border-radius: 8px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 400;
+	color: var(--csol-dark-grey);
+	background-color: #fff;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.csol-input:focus,
+.csol-select:focus {
+	outline: none;
+	border-color: var(--csol-red);
+	box-shadow: 0 0 0 3px var(--csol-light-pink);
+}
+
+/* Disposition 2 colonnes */
+
+.csol-locator-body {
+	display: grid;
+	grid-template-columns: 1.1fr 0.9fr;
+	gap: 24px;
+	align-items: start;
+}
+
+.csol-locator-map-col {
+	position: sticky;
+	top: 16px;
+}
+
+.csol-map {
+	width: 100%;
+	height: 560px;
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid var(--csol-light-grey);
+}
+
+.csol-list-count {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--csol-mid-grey);
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.csol-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-height: 560px;
+	overflow-y: auto;
+	padding-right: 4px;
+}
+
+.csol-list-loading,
+.csol-list-empty {
+	color: var(--csol-mid-grey);
+	font-size: 14px;
+	padding: 20px 0;
+}
+
+/* Carte bureau */
+
+.csol-card {
+	background: #fff;
+	border: 1px solid var(--csol-light-grey);
+	border-left: 4px solid var(--csol-red);
+	border-radius: 10px;
+	padding: 16px 18px;
+	transition: box-shadow 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+}
+
+.csol-card:hover {
+	box-shadow: 0 4px 14px rgba(55, 56, 57, 0.1);
+	transform: translateY(-1px);
+}
+
+.csol-card-active {
+	background-color: var(--csol-light-pink);
+}
+
+.csol-card-title {
+	margin: 0 0 4px;
+	font-size: 16px;
+	font-weight: 800;
+	color: var(--csol-dark-grey);
+}
+
+.csol-card-location {
+	margin: 0 0 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--csol-mid-grey);
+}
+
+.csol-card-adresse {
+	margin: 0 0 6px;
+	font-size: 13px;
+	color: var(--csol-dark-grey);
+}
+
+.csol-card-tel-row,
+.csol-card-site-row {
+	margin: 0 0 6px;
+	font-size: 13px;
+}
+
+.csol-card-tel,
+.csol-card-link {
+	color: var(--csol-red);
+	text-decoration: none;
+	font-weight: 600;
+	word-break: break-word;
+}
+
+.csol-card-tel:hover,
+.csol-card-link:hover {
+	text-decoration: underline;
+}
+
+.csol-card-produits {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 8px 0;
+}
+
+.csol-badge-produit {
+	background: var(--csol-light-grey);
+	color: var(--csol-dark-grey);
+	font-size: 11px;
+	font-weight: 600;
+	padding: 4px 10px;
+	border-radius: 999px;
+}
+
+.csol-card-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.csol-btn {
+	display: inline-block;
+	padding: 8px 16px;
+	border-radius: 8px;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	text-decoration: none;
+	text-align: center;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.csol-btn-primary {
+	background-color: var(--csol-red);
+	color: #fff;
+}
+
+.csol-btn-primary:hover {
+	background-color: #a30c28;
+	color: #fff;
+}
+
+.csol-btn-secondary {
+	background-color: #fff;
+	color: var(--csol-red);
+	border-color: var(--csol-red);
+}
+
+.csol-btn-secondary:hover {
+	background-color: var(--csol-light-pink);
+}
+
+/* Popup Leaflet */
+
+.csol-popup {
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: var(--csol-dark-grey);
+	line-height: 1.5;
+}
+
+/* Responsive : tablette et mobile */
+
+@media (max-width: 960px) {
+	.csol-locator-body {
+		grid-template-columns: 1fr;
+	}
+
+	.csol-locator-map-col {
+		position: static;
+	}
+
+	.csol-map {
+		height: 380px;
+	}
+
+	.csol-list {
+		max-height: none;
+		overflow-y: visible;
+	}
+}
+
+@media (max-width: 600px) {
+	.csol-locator-filters {
+		flex-direction: column;
+	}
+
+	.csol-card-actions {
+		flex-direction: column;
+	}
+
+	.csol-btn {
+		width: 100%;
+	}
+}
