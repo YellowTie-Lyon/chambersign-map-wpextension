@@ -24,6 +24,7 @@ if ( $result ) {
 }
 
 $missing_count = count( Geocode::get_bureaux_missing_coordinates() );
+$total_count   = count( Geocode::get_bureaux_missing_coordinates( true ) );
 
 wp_enqueue_style( 'csol-admin', CSOL_PLUGIN_URL . 'admin/css/admin.css', array(), CSOL_VERSION );
 wp_enqueue_script( 'csol-admin-geocode-batch', CSOL_PLUGIN_URL . 'admin/js/geocode-batch.js', array(), CSOL_VERSION, true );
@@ -35,12 +36,13 @@ wp_localize_script(
 		'action'  => Geocode::BATCH_ACTION,
 		'nonce'   => wp_create_nonce( Geocode::ACTION ),
 		'i18n'    => array(
-			'starting' => __( 'Démarrage du géocodage…', 'chambersign-office-locator' ),
+			'starting'      => __( 'Démarrage du géocodage…', 'chambersign-office-locator' ),
 			/* translators: 1: remaining count, 2: succeeded count, 3: failed count */
-			'progress' => __( '%1$d bureau(x) restant(s)… (%2$d géocodé(s), %3$d en échec)', 'chambersign-office-locator' ),
+			'progress'      => __( '%1$d bureau(x) restant(s)… (%2$d géocodé(s), %3$d en échec)', 'chambersign-office-locator' ),
 			/* translators: 1: remaining count that could not be geocoded */
-			'done'     => __( 'Terminé. %1$d bureau(x) n\'ont pas pu être géocodés automatiquement (adresse incomplète ou introuvable) : complétez-les manuellement dans la fiche du bureau.', 'chambersign-office-locator' ),
-			'error'    => __( 'Erreur pendant le géocodage. Réessayez.', 'chambersign-office-locator' ),
+			'done'          => __( 'Terminé. %1$d bureau(x) n\'ont pas pu être géocodés automatiquement (adresse incomplète ou introuvable) : complétez-les manuellement dans la fiche du bureau.', 'chambersign-office-locator' ),
+			'error'         => __( 'Erreur pendant le géocodage. Réessayez.', 'chambersign-office-locator' ),
+			'confirmForce'  => __( 'Ceci va recalculer les coordonnées GPS de TOUS les bureaux publiés, y compris ceux qui en ont déjà (elles seront remplacées). Continuer ?', 'chambersign-office-locator' ),
 		),
 	)
 );
@@ -101,6 +103,8 @@ wp_localize_script(
 	<hr />
 
 	<h2><?php esc_html_e( 'Géocodage automatique', 'chambersign-office-locator' ); ?></h2>
+	<p class="description"><?php esc_html_e( 'Le géocodage restreint désormais la recherche à la France, pour éviter qu\'une adresse ambiguë ne soit associée par erreur à un pays homonyme.', 'chambersign-office-locator' ); ?></p>
+
 	<?php if ( $missing_count > 0 ) : ?>
 		<p>
 			<?php
@@ -115,8 +119,22 @@ wp_localize_script(
 		<p>
 			<button type="button" id="csol_geocode_batch_button" class="button button-primary"><?php esc_html_e( 'Géocoder les bureaux manquants', 'chambersign-office-locator' ); ?></button>
 		</p>
-		<p id="csol_geocode_batch_status" class="csol-geocode-status" aria-live="polite"></p>
 	<?php else : ?>
 		<p><?php esc_html_e( 'Tous les bureaux publiés ont des coordonnées GPS.', 'chambersign-office-locator' ); ?></p>
 	<?php endif; ?>
+
+	<p>
+		<?php
+		printf(
+			/* translators: %d: total number of published bureaus */
+			esc_html( _n( 'Vous pouvez aussi forcer le re-géocodage du seul bureau publié, par exemple si des coordonnées existantes semblent erronées.', 'Vous pouvez aussi forcer le re-géocodage des %d bureaux publiés, par exemple si des coordonnées existantes semblent erronées.', $total_count, 'chambersign-office-locator' ) ),
+			(int) $total_count
+		);
+		?>
+	</p>
+	<p>
+		<button type="button" id="csol_geocode_force_button" class="button"><?php esc_html_e( 'Re-géocoder tous les bureaux', 'chambersign-office-locator' ); ?></button>
+	</p>
+
+	<p id="csol_geocode_batch_status" class="csol-geocode-status" aria-live="polite"></p>
 </div>

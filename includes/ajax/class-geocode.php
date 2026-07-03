@@ -69,7 +69,8 @@ class Geocode {
 			wp_send_json_error( array( 'message' => __( 'Non autorisé.', 'chambersign-office-locator' ) ), 403 );
 		}
 
-		$missing = self::get_bureaux_missing_coordinates();
+		$force   = ! empty( $_POST['force'] );
+		$missing = self::get_bureaux_missing_coordinates( $force );
 		$batch   = array_slice( $missing, 0, self::BATCH_SIZE );
 
 		$succeeded = 0;
@@ -128,9 +129,14 @@ class Geocode {
 	private function lookup( string $query ) {
 		$url = add_query_arg(
 			array(
-				'q'      => $query,
-				'format' => 'json',
-				'limit'  => 1,
+				'q'            => $query,
+				'format'       => 'json',
+				'limit'        => 1,
+				// Les bureaux ChamberSign sont tous en France : sans cette
+				// contrainte, une adresse ambiguë ou mal formée (ex. "31-35
+				// Quai Louis Blanc") peut faire remonter un résultat homonyme
+				// n'importe où dans le monde plutôt qu'un échec propre.
+				'countrycodes' => 'fr',
 			),
 			'https://nominatim.openstreetmap.org/search'
 		);
@@ -164,12 +170,19 @@ class Geocode {
 	}
 
 	/**
-	 * Retourne les IDs des bureaux publiés sans coordonnées GPS valides
-	 * (hors bureaux déjà marqués en échec de géocodage).
+	 * Retourne les IDs des bureaux publiés à géocoder.
+	 *
+	 * Par défaut, seuls les bureaux sans coordonnées GPS valides (hors ceux
+	 * déjà marqués en échec de géocodage). En mode $force, retourne TOUS les
+	 * bureaux publiés, y compris ceux ayant déjà des coordonnées : utile
+	 * pour re-géocoder après une correction de la requête (ex. restriction
+	 * pays ajoutée après coup, coordonnées existantes potentiellement fausses).
+	 *
+	 * @param bool $force Ignore les coordonnées et le statut d'échec existants.
 	 *
 	 * @return array<int, int>
 	 */
-	public static function get_bureaux_missing_coordinates(): array {
+	public static function get_bureaux_missing_coordinates( bool $force = false ): array {
 		$ids = get_posts(
 			array(
 				'post_type'              => Bureau::POST_TYPE,
@@ -180,6 +193,10 @@ class Geocode {
 				'update_post_term_cache' => false,
 			)
 		);
+
+		if ( $force ) {
+			return $ids;
+		}
 
 		$missing = array();
 

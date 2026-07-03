@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,10 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.1.4 =
+* Correction : le géocodage automatique n'était pas restreint à la France. Sur des adresses ambiguës ou mal formées, Nominatim pouvait faire correspondre le bureau à un pays homonyme (souvent une ancienne colonie francophone), plaçant le marqueur très loin de son emplacement réel.
+* Ajout d'un bouton "Re-géocoder tous les bureaux" (Import) pour recalculer les coordonnées de bureaux déjà géocodés (utile après ce correctif si des positions semblent fausses).
 
 = 1.1.3 =
 * Correction : l'icône du marqueur (par défaut comme personnalisée) pouvait générer une URL cassée à cause d'un comportement interne de Leaflet (L.Icon.Default préfixe toujours l'URL avec un chemin auto-détecté). Les marqueurs utilisent maintenant une icône construite explicitement (L.icon/L.divIcon), sans ce problème.
