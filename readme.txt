@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,10 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.1.3 =
+* Correction : l'icône du marqueur (par défaut comme personnalisée) pouvait générer une URL cassée à cause d'un comportement interne de Leaflet (L.Icon.Default préfixe toujours l'URL avec un chemin auto-détecté). Les marqueurs utilisent maintenant une icône construite explicitement (L.icon/L.divIcon), sans ce problème.
+* Nouveau marqueur par défaut : point rouge pulsant (aux couleurs ChamberSign), sans aucune image à charger.
 
 = 1.1.2 =
 * IMPORTANT : la désinstallation (Extensions > Supprimer) supprimait automatiquement et définitivement tous les bureaux, produits et réglages. Elle conserve désormais les données par défaut ; la suppression devient une option à cocher explicitement dans Réglages > Désinstallation.
