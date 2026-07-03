@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.1.5 =
+* Correction : le marqueur par défaut (point pulsant, introduit en 1.1.3) construit avec L.divIcon() pouvait se retrouver mal positionné sur la carte dans certains environnements, alors que la même donnée restait correcte partout ailleurs (fiche bureau, popup). Le point par défaut est reconstruit avec L.icon() — le même mécanisme, déjà fiable, que l'icône SVG personnalisée — et n'est plus animé (simple point rouge fixe, comme demandé).
 
 = 1.1.4 =
 * Correction : le géocodage automatique n'était pas restreint à la France. Sur des adresses ambiguës ou mal formées, Nominatim pouvait faire correspondre le bureau à un pays homonyme (souvent une ancienne colonie francophone), plaçant le marqueur très loin de son emplacement réel.

@@ -15,23 +15,30 @@
 	// avec un "imagePath" auto-détecté depuis le CSS de Leaflet, même quand
 	// on lui donne une URL absolue ou une icône personnalisée. Résultat :
 	// "{cheminLeaflet}/images/{notreURL}", une URL cassée. Un simple L.icon()
-	// / L.divIcon() n'a pas ce comportement et est utilisé explicitement sur
-	// chaque marqueur.
-	var markerIcon = csolLocator.markerIconUrl
-		? L.icon( {
+	// n'a pas ce comportement et est utilisé explicitement sur chaque
+	// marqueur. On évite aussi L.divIcon() pour le point par défaut : dans
+	// certains environnements il a été observé positionner les marqueurs de
+	// façon incorrecte, alors que L.icon() (utilisé pour l'icône SVG
+	// personnalisée) fonctionne de façon fiable — on utilise donc le même
+	// mécanisme pour les deux cas plutôt que de creuser plus avant.
+	var DEFAULT_DOT_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCI+PGNpcmNsZSBjeD0iOSIgY3k9IjkiIHI9IjYiIGZpbGw9IiNEMjEwMzQiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz48L3N2Zz4=';
+
+	var markerIcon = L.icon( csolLocator.markerIconUrl
+		? {
 			iconUrl: csolLocator.markerIconUrl,
 			iconRetinaUrl: csolLocator.markerIconUrl,
 			iconSize: [ 32, 32 ],
 			iconAnchor: [ 16, 32 ],
 			popupAnchor: [ 0, -30 ],
-		} )
-		: L.divIcon( {
-			className: 'csol-marker-pulse',
-			html: '<span class="csol-marker-pulse-ring"></span><span class="csol-marker-pulse-dot"></span>',
-			iconSize: [ 20, 20 ],
-			iconAnchor: [ 10, 10 ],
-			popupAnchor: [ 0, -12 ],
-		} );
+		}
+		: {
+			iconUrl: DEFAULT_DOT_ICON,
+			iconRetinaUrl: DEFAULT_DOT_ICON,
+			iconSize: [ 18, 18 ],
+			iconAnchor: [ 9, 9 ],
+			popupAnchor: [ 0, -10 ],
+		}
+	);
 
 	/**
 	 * Débounce simple pour la recherche texte.
