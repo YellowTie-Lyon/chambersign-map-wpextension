@@ -1,5 +1,5 @@
 === ChamberSign Office Locator ===
-Contributors: chambersign
+Contributors: yellowtie
 Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
@@ -51,3 +51,7 @@ Un bureau existant portant le même nom est mis à jour ; sinon un nouveau burea
 
 = 1.0.0 =
 * Version initiale.
+
+== Crédits ==
+
+Développé par YellowTie pour ChamberSign.
