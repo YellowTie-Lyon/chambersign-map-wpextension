@@ -120,7 +120,14 @@
 	border: 1px solid var(--csol-light-grey);
 }
 
+.csol-locator-list-col {
+	display: flex;
+	flex-direction: column;
+	height: 560px;
+}
+
 .csol-list-count {
+	flex: 0 0 auto;
 	font-size: 13px;
 	font-weight: 600;
 	color: var(--csol-mid-grey);
@@ -132,8 +139,9 @@
 .csol-list {
 	display: flex;
 	flex-direction: column;
+	flex: 1 1 auto;
 	gap: 8px;
-	max-height: 560px;
+	min-height: 0;
 	overflow-y: auto;
 	padding-right: 4px;
 }
@@ -294,8 +302,12 @@
 		height: 380px;
 	}
 
+	.csol-locator-list-col {
+		height: auto;
+	}
+
 	.csol-list {
-		max-height: none;
+		flex: none;
 		overflow-y: visible;
 	}
 }

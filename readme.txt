@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.3.1 =
+* Ajustement d'affichage : la colonne liste (à droite) fait maintenant exactement la même hauteur que la carte, quel que soit le nombre de résultats.
 
 = 1.3.0 =
 * Refonte de la barre de filtres : suppression du filtre Département (redondant avec la recherche texte, qui couvre déjà ville/code postal/département) et ajout d'un bouton "Autour de moi" (géolocalisation navigateur). Les résultats sont alors triés par distance, avec la distance affichée sur chaque bureau, et restent triés ainsi tant que la géolocalisation est active, même en changeant de filtre.
