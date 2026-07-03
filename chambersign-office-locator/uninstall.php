@@ -16,7 +16,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 function csol_uninstall_delete_bureaux(): void {
 	$posts = get_posts(
 		array(
-			'post_type'      => 'bureau_enregistrement',
+			'post_type'      => 'csol_bureau',
 			'post_status'    => 'any',
 			'posts_per_page' => -1,
 			'fields'         => 'ids',

@@ -6,11 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Custom Post Type "bureau_enregistrement".
+ * Custom Post Type "bureau d'enregistrement".
+ *
+ * Le nom technique du post type (csol_bureau) reste sous 20 caractères :
+ * WordPress refuse silencieusement (WP_Error, sans erreur fatale) tout
+ * post_type dont le nom dépasse cette limite, ce qui empêcherait le CPT
+ * de s'enregistrer (le libellé "bureau_enregistrement" seul fait 21
+ * caractères et dépasse déjà la limite).
  */
 class Bureau {
 
-	public const POST_TYPE = 'bureau_enregistrement';
+	public const POST_TYPE = 'csol_bureau';
 
 	/**
 	 * Préfixe utilisé pour toutes les meta du bureau.

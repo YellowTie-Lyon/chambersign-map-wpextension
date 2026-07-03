@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Taxonomie "produit" (Certificat RGS, eIDAS, ...), en relation many-to-many
- * avec le CPT bureau_enregistrement.
+ * avec le CPT csol_bureau (bureau d'enregistrement).
  */
 class Produit {
 
