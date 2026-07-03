@@ -129,7 +129,10 @@ class Search {
 
 		return array(
 			'id'          => $post->ID,
-			'title'       => get_the_title( $post ),
+			// Titre brut (non filtré) : get_the_title() applique wptexturize et
+			// convertirait par ex. " - " en l'entité HTML "&#8211;", qui serait
+			// alors ré-échappée telle quelle par le JS côté front (JSON, pas HTML).
+			'title'       => $post->post_title,
 			'region'      => get_post_meta( $post->ID, Bureau::META_PREFIX . 'region', true ),
 			'departement' => get_post_meta( $post->ID, Bureau::META_PREFIX . 'departement', true ),
 			'ville'       => get_post_meta( $post->ID, Bureau::META_PREFIX . 'ville', true ),

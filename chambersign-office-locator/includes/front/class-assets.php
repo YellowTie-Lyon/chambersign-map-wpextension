@@ -80,11 +80,10 @@ class Assets {
 			'csol-locator',
 			'csolLocator',
 			array(
-				'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
-				'action'          => Search::ACTION,
-				'nonce'           => wp_create_nonce( Search::ACTION ),
-				'leafletImageUrl' => CSOL_PLUGIN_URL . 'public/vendor/leaflet/images/',
-				'settings'        => array(
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'action'   => Search::ACTION,
+				'nonce'    => wp_create_nonce( Search::ACTION ),
+				'settings' => array(
 					'defaultLat'      => (float) $settings['default_lat'],
 					'defaultLng'      => (float) $settings['default_lng'],
 					'zoomFrance'      => (int) $settings['zoom_france'],
