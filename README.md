@@ -6,7 +6,7 @@ Développée par **YellowTie** pour **ChamberSign**.
 
 ## Fonctionnalités
 
-- **Carte interactive** OpenStreetMap/Leaflet (aucune dépendance à Google Maps).
+- **Carte interactive** OpenStreetMap/Leaflet (aucune dépendance à Google Maps), avec regroupement automatique des bureaux proches (Leaflet.markercluster) : clic sur une bulle pour zoomer et révéler les bureaux qu'elle contient.
 - **Recherche AJAX** en temps réel — texte libre, région, département, produit — sans rechargement de page.
 - **Fiches bureaux compactes** : nom, adresse, téléphone, site web, produits proposés, bouton itinéraire.
 - **Gestion complète en back-office** :
@@ -71,7 +71,7 @@ includes/
   front/                         Shortcode et chargement des assets front
   vendor/simplexlsx/             Lecture des fichiers XLSX (MIT)
 admin/                           Vues et assets de l'administration
-public/                          Vues, CSS et JS du front (+ Leaflet, BSD)
+public/                          Vues, CSS et JS du front (+ Leaflet BSD, Leaflet.markercluster MIT)
 languages/                       Fichiers de traduction
 ```
 
@@ -79,7 +79,7 @@ languages/                       Fichiers de traduction
 
 - Toutes les entrées sont assainies (`sanitize_text_field`, `esc_url_raw`…) et toutes les sorties échappées (`esc_html`, `esc_attr`, `esc_url`…).
 - Toutes les actions AJAX sont protégées par un nonce WordPress et une vérification de capacité.
-- Aucune dépendance externe payante : Leaflet (BSD) et SimpleXLSX (MIT) sont fournis avec le plugin.
+- Aucune dépendance externe payante : Leaflet (BSD), Leaflet.markercluster (MIT) et SimpleXLSX (MIT) sont fournis avec le plugin.
 - Désinstaller l'extension (Extensions > Supprimer) **conserve vos données par défaut** : bureaux, produits et réglages restent en base tant que la case correspondante n'est pas cochée dans Réglages > Désinstallation. Réinstaller le plugin ne fait donc jamais perdre vos bureaux.
 
 ## Licence

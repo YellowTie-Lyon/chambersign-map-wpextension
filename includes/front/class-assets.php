@@ -16,7 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Assets {
 
-	public const LEAFLET_VERSION = '1.9.4';
+	public const LEAFLET_VERSION       = '1.9.4';
+	public const MARKERCLUSTER_VERSION = '1.5.3';
 
 	/**
 	 * Enregistre les hooks WordPress.
@@ -44,6 +45,25 @@ class Assets {
 			true
 		);
 
+		// MarkerCluster.Default.css (styles de bulle par défaut) n'est pas
+		// chargé : les bulles sont un SVG généré à la volée (voir
+		// buildClusterIcon() dans le JS), les classes .marker-cluster-* par
+		// défaut ne sont jamais appliquées.
+		wp_register_style(
+			'csol-markercluster',
+			CSOL_PLUGIN_URL . 'public/vendor/leaflet-markercluster/MarkerCluster.css',
+			array(),
+			self::MARKERCLUSTER_VERSION
+		);
+
+		wp_register_script(
+			'csol-markercluster',
+			CSOL_PLUGIN_URL . 'public/vendor/leaflet-markercluster/leaflet.markercluster.js',
+			array( 'csol-leaflet' ),
+			self::MARKERCLUSTER_VERSION,
+			true
+		);
+
 		wp_register_style(
 			'csol-google-font-poppins',
 			'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap',
@@ -54,14 +74,14 @@ class Assets {
 		wp_register_style(
 			'csol-locator',
 			CSOL_PLUGIN_URL . 'public/css/chambersign-locator.css',
-			array( 'csol-leaflet', 'csol-google-font-poppins' ),
+			array( 'csol-leaflet', 'csol-markercluster', 'csol-google-font-poppins' ),
 			CSOL_VERSION
 		);
 
 		wp_register_script(
 			'csol-locator',
 			CSOL_PLUGIN_URL . 'public/js/chambersign-locator.js',
-			array( 'csol-leaflet' ),
+			array( 'csol-leaflet', 'csol-markercluster' ),
 			CSOL_VERSION,
 			true
 		);

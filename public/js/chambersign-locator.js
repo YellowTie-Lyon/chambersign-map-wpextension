@@ -41,6 +41,31 @@
 	);
 
 	/**
+	 * Construit l'icône d'une bulle de regroupement (nombre de bureaux
+	 * qu'elle contient) sous forme de SVG généré à la volée, affiché via
+	 * L.icon() — pas L.divIcon(), pour la même raison que ci-dessus.
+	 */
+	function buildClusterIcon( count ) {
+		var size = count < 10 ? 34 : ( count < 25 ? 42 : 50 );
+		var fontSize = count < 10 ? 13 : ( count < 25 ? 15 : 17 );
+		var center = size / 2;
+		var radius = center - 2;
+
+		var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '">' +
+			'<circle cx="' + center + '" cy="' + center + '" r="' + radius + '" fill="#D21034" fill-opacity="0.9" stroke="#ffffff" stroke-width="2"/>' +
+			'<text x="' + center + '" y="' + center + '" text-anchor="middle" dominant-baseline="central" font-family="Poppins, Arial, sans-serif" font-size="' + fontSize + '" font-weight="700" fill="#ffffff">' + count + '</text>' +
+			'</svg>';
+
+		var dataUri = 'data:image/svg+xml;base64,' + window.btoa( svg );
+
+		return L.icon( {
+			iconUrl: dataUri,
+			iconSize: [ size, size ],
+			iconAnchor: [ center, center ],
+		} );
+	}
+
+	/**
 	 * Débounce simple pour la recherche texte.
 	 */
 	function debounce( fn, wait ) {
@@ -117,7 +142,19 @@
 			attribution: tile.attribution || '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		} ).addTo( this.map );
 
-		this.markersLayer = L.layerGroup().addTo( this.map );
+		var hasClustering = typeof L.markerClusterGroup === 'function';
+
+		this.markersLayer = hasClustering
+			? L.markerClusterGroup( {
+				showCoverageOnHover: false,
+				spiderfyOnMaxZoom: true,
+				iconCreateFunction: function ( cluster ) {
+					return buildClusterIcon( cluster.getChildCount() );
+				},
+			} )
+			: L.layerGroup();
+
+		this.map.addLayer( this.markersLayer );
 	};
 
 	CsolLocatorInstance.prototype.bindFilters = function () {
@@ -329,6 +366,20 @@
 	CsolLocatorInstance.prototype.focusBureau = function ( bureauId ) {
 		var marker = this.markers[ bureauId ];
 		if ( ! marker ) {
+			return;
+		}
+
+		var self = this;
+
+		if ( typeof this.markersLayer.zoomToShowLayer === 'function' ) {
+			// Le marqueur peut être caché dans une bulle de regroupement :
+			// zoome/déplace la carte jusqu'à ce qu'il soit visible seul,
+			// avant d'ouvrir sa popup (comportement fourni par le plugin de
+			// clustering, gère aussi le cas non-clusterisé).
+			this.markersLayer.zoomToShowLayer( marker, function () {
+				marker.openPopup();
+				self.highlightCard( bureauId );
+			} );
 			return;
 		}
 

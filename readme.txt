@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.5
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Fonctionnalités :
 
 * Custom Post Type "Bureaux d'enregistrement" avec coordonnées GPS, coordonnées de contact et statut actif/inactif.
 * Taxonomie "Produits" (RGS, eIDAS, Signature Électronique, Cachet Serveur…) en relation many-to-many avec les bureaux.
-* Carte interactive OpenStreetMap (Leaflet), sans dépendance à Google Maps.
+* Carte interactive OpenStreetMap (Leaflet), sans dépendance à Google Maps, avec regroupement automatique des bureaux proches (Leaflet.markercluster).
 * Recherche AJAX (texte libre, région, département, produit) sans rechargement de page.
 * Import/mise à jour en masse des bureaux depuis un fichier CSV ou XLSX.
 * Aide au géocodage (Nominatim/OpenStreetMap) dans l'administration.
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.2.0 =
+* Ajout du regroupement automatique des bureaux proches sur la carte (Leaflet.markercluster) : bulle avec le nombre de bureaux, clic pour zoomer et les révéler.
 
 = 1.1.5 =
 * Correction : le marqueur par défaut (point pulsant, introduit en 1.1.3) construit avec L.divIcon() pouvait se retrouver mal positionné sur la carte dans certains environnements, alors que la même donnée restait correcte partout ailleurs (fiche bureau, popup). Le point par défaut est reconstruit avec L.icon() — le même mécanisme, déjà fiable, que l'icône SVG personnalisée — et n'est plus animé (simple point rouge fixe, comme demandé).
