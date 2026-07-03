@@ -1,0 +1,1 @@
+# chambersign-map-wpextension
