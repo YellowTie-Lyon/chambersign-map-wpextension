@@ -80,6 +80,7 @@ languages/                       Fichiers de traduction
 - Toutes les entrées sont assainies (`sanitize_text_field`, `esc_url_raw`…) et toutes les sorties échappées (`esc_html`, `esc_attr`, `esc_url`…).
 - Toutes les actions AJAX sont protégées par un nonce WordPress et une vérification de capacité.
 - Aucune dépendance externe payante : Leaflet (BSD) et SimpleXLSX (MIT) sont fournis avec le plugin.
+- Désinstaller l'extension (Extensions > Supprimer) **conserve vos données par défaut** : bureaux, produits et réglages restent en base tant que la case correspondante n'est pas cochée dans Réglages > Désinstallation. Réinstaller le plugin ne fait donc jamais perdre vos bureaux.
 
 ## Licence
 

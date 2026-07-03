@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.1.2 =
+* IMPORTANT : la désinstallation (Extensions > Supprimer) supprimait automatiquement et définitivement tous les bureaux, produits et réglages. Elle conserve désormais les données par défaut ; la suppression devient une option à cocher explicitement dans Réglages > Désinstallation.
 
 = 1.1.1 =
 * Correction : la recherche texte libre ne portait que sur le nom du bureau. Elle porte désormais aussi sur la ville, le code postal, l'adresse, la région et le département.

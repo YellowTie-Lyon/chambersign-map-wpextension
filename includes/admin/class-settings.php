@@ -60,6 +60,7 @@ class Settings {
 			'zoom_departement' => 10,
 			'zoom_bureau'      => 14,
 			'tile_provider'    => 'osm',
+			'delete_data_on_uninstall' => false,
 		);
 	}
 
@@ -159,6 +160,21 @@ class Settings {
 			self::PAGE_SLUG,
 			'csol_section_apparence'
 		);
+
+		add_settings_section(
+			'csol_section_uninstall',
+			__( 'Désinstallation', 'chambersign-office-locator' ),
+			array( $this, 'render_uninstall_section_intro' ),
+			self::PAGE_SLUG
+		);
+
+		add_settings_field(
+			'csol_field_delete_data_on_uninstall',
+			__( 'Supprimer les données', 'chambersign-office-locator' ),
+			array( $this, 'render_delete_data_field' ),
+			self::PAGE_SLUG,
+			'csol_section_uninstall'
+		);
 	}
 
 	/**
@@ -180,9 +196,11 @@ class Settings {
 			$output[ $zoom_key ] = max( 0, min( 19, $value ) );
 		}
 
-		$providers             = self::get_tile_providers();
-		$tile_provider          = isset( $input['tile_provider'] ) ? sanitize_key( $input['tile_provider'] ) : $defaults['tile_provider'];
-		$output['tile_provider'] = isset( $providers[ $tile_provider ] ) ? $tile_provider : $defaults['tile_provider'];
+		$providers                = self::get_tile_providers();
+		$tile_provider            = isset( $input['tile_provider'] ) ? sanitize_key( $input['tile_provider'] ) : $defaults['tile_provider'];
+		$output['tile_provider']  = isset( $providers[ $tile_provider ] ) ? $tile_provider : $defaults['tile_provider'];
+
+		$output['delete_data_on_uninstall'] = ! empty( $input['delete_data_on_uninstall'] );
 
 		return $output;
 	}
@@ -245,6 +263,38 @@ class Settings {
 			<?php endforeach; ?>
 		</select>
 		<p class="description"><?php esc_html_e( 'Fonds de carte libres d\'accès, sans clé API ni service payant.', 'chambersign-office-locator' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Affiche l'avertissement du bloc Désinstallation.
+	 */
+	public function render_uninstall_section_intro(): void {
+		?>
+		<p>
+			<?php esc_html_e( 'Par défaut, désinstaller l\'extension (Extensions > Supprimer) conserve tous vos bureaux, produits et réglages : vous pouvez la réinstaller sans rien reperdre. Cochez l\'option ci-dessous uniquement si vous voulez que la désinstallation efface définitivement ces données.', 'chambersign-office-locator' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Affiche la case à cocher de suppression des données à la désinstallation.
+	 */
+	public function render_delete_data_field(): void {
+		$settings = self::get_settings();
+		$checked  = ! empty( $settings['delete_data_on_uninstall'] );
+		?>
+		<label>
+			<input
+				type="checkbox"
+				id="csol_field_delete_data_on_uninstall"
+				name="<?php echo esc_attr( self::OPTION_NAME ); ?>[delete_data_on_uninstall]"
+				value="1"
+				<?php checked( $checked ); ?>
+			/>
+			<?php esc_html_e( 'Supprimer définitivement les bureaux, produits et réglages lorsque l\'extension est désinstallée.', 'chambersign-office-locator' ); ?>
+		</label>
+		<p class="description"><?php esc_html_e( 'Décoché par défaut. Cette action est irréversible et n\'a aucun rapport avec le fait de désactiver l\'extension.', 'chambersign-office-locator' ); ?></p>
 		<?php
 	}
 }
