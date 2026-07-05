@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,11 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.3.2 =
+* Correction : le bouton "Autour de moi" n'était pas aligné visuellement avec le reste de la barre de filtres (hauteur différente à cause d'un conflit de spécificité CSS).
+* Correction : activer "Autour de moi" ne zoomait plus sur la position de l'utilisateur car la carte tentait d'englober tous les résultats (jusqu'à l'autre bout du monde en cas de bureau mal géocodé). Elle centre désormais la vue directement sur l'utilisateur.
+* Suppression du bouton "Itinéraire" des cartes bureau (ne reste que "Voir sur la carte").
 
 = 1.3.1 =
 * Ajustement d'affichage : la colonne liste (à droite) fait maintenant exactement la même hauteur que la carte, quel que soit le nombre de résultats.

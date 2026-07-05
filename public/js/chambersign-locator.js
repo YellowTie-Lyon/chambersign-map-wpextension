@@ -372,7 +372,7 @@
 
 		var self = this;
 		var listHtml = '';
-		var bounds = this.userLocation ? [ [ this.userLocation.lat, this.userLocation.lng ] ] : [];
+		var bounds = [];
 
 		bureaux.forEach( function ( bureau ) {
 			listHtml += self.buildCardHtml( bureau );
@@ -390,7 +390,14 @@
 
 		this.listEl.innerHTML = listHtml;
 
-		if ( bounds.length > 1 ) {
+		if ( this.userLocation ) {
+			// En mode "Autour de moi", on centre/zoome sur la position de
+			// l'utilisateur plutôt que d'englober tous les résultats : avec
+			// 144 bureaux à travers la France, un fitBounds sur l'ensemble
+			// zoomerait beaucoup trop large (et serait faussé par le moindre
+			// bureau mal géocodé). La liste reste triée par distance.
+			this.map.flyTo( [ this.userLocation.lat, this.userLocation.lng ], this.settings.zoomDepartement );
+		} else if ( bounds.length > 1 ) {
 			this.map.fitBounds( bounds, { padding: [ 30, 30 ], maxZoom: this.settings.zoomRegion } );
 		} else if ( 1 === bounds.length ) {
 			this.map.setView( bounds[ 0 ], this.settings.zoomDepartement );
@@ -473,8 +480,6 @@
 			contactHtml = '<p class="csol-card-contact">' + telHtml + siteHtml + '</p>';
 		}
 
-		var directionsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent( bureau.lat + ',' + bureau.lng );
-
 		var distanceHtml = ( 'number' === typeof bureau._distanceKm )
 			? ' <span class="csol-card-distance">&middot; ' + escapeHtml( formatDistanceKm( bureau._distanceKm ) ) + '</span>'
 			: '';
@@ -487,8 +492,7 @@
 				contactHtml +
 				produitsHtml +
 				'<div class="csol-card-actions">' +
-					'<button type="button" class="csol-btn csol-btn-secondary csol-card-view" data-bureau-id="' + bureau.id + '">' + escapeHtml( csolLocator.i18n.viewOnMap ) + '</button>' +
-					'<a href="' + escapeAttr( directionsUrl ) + '" class="csol-btn csol-btn-primary" target="_blank" rel="noopener noreferrer">' + escapeHtml( csolLocator.i18n.directions ) + '</a>' +
+					'<button type="button" class="csol-btn csol-btn-primary csol-card-view" data-bureau-id="' + bureau.id + '">' + escapeHtml( csolLocator.i18n.viewOnMap ) + '</button>' +
 				'</div>' +
 			'</article>'
 		);
