@@ -9,18 +9,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shortcode [chambersign_locator] : rend le localisateur de bureaux
- * (carte + liste + filtres) en 2 colonnes.
+ * Shortcodes [chambersign_locator] (carte + liste + filtres, 2 colonnes)
+ * et [chambersign_locator_map] (carte seule, centrée sur la France).
  */
 class Shortcode {
 
-	public const TAG = 'chambersign_locator';
+	public const TAG     = 'chambersign_locator';
+	public const TAG_MAP = 'chambersign_locator_map';
 
 	/**
 	 * Enregistre les hooks WordPress.
 	 */
 	public function register_hooks(): void {
 		add_shortcode( self::TAG, array( $this, 'render' ) );
+		add_shortcode( self::TAG_MAP, array( $this, 'render_map' ) );
 	}
 
 	/**
@@ -43,6 +45,31 @@ class Shortcode {
 
 		ob_start();
 		require CSOL_PLUGIN_DIR . 'public/views/locator-template.php';
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Rend uniquement la carte (sans recherche ni liste), centrée sur la
+	 * France : idéal pour une page d'accueil ou un widget.
+	 *
+	 * Attribut : height (ex. [chambersign_locator_map height="480px"]).
+	 *
+	 * @param array<string, string>|string $atts Attributs du shortcode.
+	 */
+	public function render_map( $atts = array() ): string {
+		( new Assets() )->enqueue();
+
+		$atts = shortcode_atts(
+			array( 'height' => '480px' ),
+			$atts,
+			self::TAG_MAP
+		);
+
+		$height = preg_match( '/^\d+(\.\d+)?(px|em|rem|vh|%)$/', $atts['height'] ) ? $atts['height'] : '480px';
+
+		ob_start();
+		require CSOL_PLUGIN_DIR . 'public/views/locator-map-template.php';
 
 		return ob_get_clean();
 	}

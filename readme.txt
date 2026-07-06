@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.3.3
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ Fonctionnalités :
 
 Aucun attribut requis : le shortcode affiche la carte et la liste des bureaux actifs, avec les filtres de recherche.
 
+`[chambersign_locator_map]` ou `[chambersign_locator_map height="500px"]`
+
+Carte seule (sans recherche ni liste), centrée sur la France, bureaux en clusters cliquables : idéal pour une page d'accueil.
+
 == Import CSV/XLSX ==
 
 Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, Adresse, Téléphone, Site internet, Horaires, Latitude, Longitude, Produits (séparés par une virgule ou un "|").
@@ -48,6 +52,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.4.0 =
+* Ajout du shortcode `[chambersign_locator_map]` : carte seule (sans recherche ni liste), centrée sur la France, bureaux en clusters cliquables. Idéal pour une page d'accueil ou un widget.
 
 = 1.3.3 =
 * Correction import CSV : un fichier enregistré en "UTF-8 avec BOM" (comportement par défaut d'Excel) faisait échouer la reconnaissance de la toute première colonne d'en-tête, quelle qu'elle soit. Le BOM est désormais ignoré à la lecture des en-têtes.

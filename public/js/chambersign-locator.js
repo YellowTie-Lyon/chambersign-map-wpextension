@@ -164,6 +164,12 @@
 		this.userLocation = null;
 		this.userMarker = null;
 
+		// Mode "carte seule" ([chambersign_locator_map]) : pas de recherche/
+		// liste, et la vue reste fixée sur la France plutôt que de zoomer
+		// automatiquement sur les résultats (immunise ce widget contre un
+		// éventuel bureau mal géocodé).
+		this.autoFitBounds = ! root.classList.contains( 'csol-locator-map-only' );
+
 		this.initMap();
 		this.bindFilters();
 		this.bindGeoloc();
@@ -363,7 +369,9 @@
 			} );
 		}
 
-		this.countEl.textContent = bureaux.length + ' ' + ( bureaux.length > 1 ? 'bureaux' : 'bureau' );
+		if ( this.countEl ) {
+			this.countEl.textContent = bureaux.length + ' ' + ( bureaux.length > 1 ? 'bureaux' : 'bureau' );
+		}
 
 		if ( ! bureaux.length ) {
 			this.renderEmpty();
@@ -375,7 +383,9 @@
 		var bounds = [];
 
 		bureaux.forEach( function ( bureau ) {
-			listHtml += self.buildCardHtml( bureau );
+			if ( self.listEl ) {
+				listHtml += self.buildCardHtml( bureau );
+			}
 
 			if ( bureau.lat && bureau.lng ) {
 				var marker = L.marker( [ bureau.lat, bureau.lng ], { icon: markerIcon } ).addTo( self.markersLayer );
@@ -388,25 +398,39 @@
 			}
 		} );
 
-		this.listEl.innerHTML = listHtml;
-
-		if ( this.userLocation ) {
-			// En mode "Autour de moi", on centre/zoome sur la position de
-			// l'utilisateur plutôt que d'englober tous les résultats : avec
-			// 144 bureaux à travers la France, un fitBounds sur l'ensemble
-			// zoomerait beaucoup trop large (et serait faussé par le moindre
-			// bureau mal géocodé). La liste reste triée par distance.
-			this.map.flyTo( [ this.userLocation.lat, this.userLocation.lng ], this.settings.zoomDepartement );
-		} else if ( bounds.length > 1 ) {
-			this.map.fitBounds( bounds, { padding: [ 30, 30 ], maxZoom: this.settings.zoomRegion } );
-		} else if ( 1 === bounds.length ) {
-			this.map.setView( bounds[ 0 ], this.settings.zoomDepartement );
+		if ( this.listEl ) {
+			this.listEl.innerHTML = listHtml;
 		}
 
-		this.bindCardEvents();
+		if ( this.autoFitBounds ) {
+			if ( this.userLocation ) {
+				// En mode "Autour de moi", on centre/zoome sur la position de
+				// l'utilisateur plutôt que d'englober tous les résultats : avec
+				// 144 bureaux à travers la France, un fitBounds sur l'ensemble
+				// zoomerait beaucoup trop large (et serait faussé par le moindre
+				// bureau mal géocodé). La liste reste triée par distance.
+				this.map.flyTo( [ this.userLocation.lat, this.userLocation.lng ], this.settings.zoomDepartement );
+			} else if ( bounds.length > 1 ) {
+				this.map.fitBounds( bounds, { padding: [ 30, 30 ], maxZoom: this.settings.zoomRegion } );
+			} else if ( 1 === bounds.length ) {
+				this.map.setView( bounds[ 0 ], this.settings.zoomDepartement );
+			}
+		}
+
+		if ( this.listEl ) {
+			this.bindCardEvents();
+		}
 	};
 
 	CsolLocatorInstance.prototype.renderEmpty = function () {
+		if ( this.countEl ) {
+			this.countEl.textContent = '';
+		}
+
+		if ( ! this.listEl ) {
+			return;
+		}
+
 		var hasActiveFilters = ( this.searchInput && this.searchInput.value )
 			|| ( this.regionSelect && this.regionSelect.value )
 			|| ( this.produitSelect && this.produitSelect.value );
@@ -418,7 +442,6 @@
 		}
 
 		this.listEl.innerHTML = html;
-		this.countEl.textContent = '';
 
 		var resetButton = this.listEl.querySelector( '.csol-reset-filters' );
 		if ( resetButton ) {

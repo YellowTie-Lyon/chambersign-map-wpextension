@@ -42,6 +42,17 @@ Insérez le shortcode suivant sur n'importe quelle page ou article (éditeur cla
 [chambersign_locator]
 ```
 
+### Afficher uniquement la carte (page d'accueil, widget)
+
+Pour un aperçu compact sans recherche ni liste — carte seule centrée sur la France, bureaux en clusters cliquables :
+
+```
+[chambersign_locator_map]
+[chambersign_locator_map height="500px"]
+```
+
+L'attribut `height` est optionnel (480px par défaut).
+
 ### Ajouter des bureaux
 
 - Manuellement depuis **ChamberSign Locator > Bureaux d'enregistrement > Ajouter**.
