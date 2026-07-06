@@ -148,6 +148,7 @@
 		this.root = root;
 		this.id = root.id;
 		this.settings = csolLocator.settings;
+		this.isMapOnly = root.classList.contains( 'csol-locator-map-only' );
 
 		this.mapEl = document.getElementById( this.id + '-map' );
 		this.listEl = document.getElementById( this.id + '-list' );
@@ -404,6 +405,14 @@
 
 		if ( this.listEl ) {
 			this.listEl.innerHTML = listHtml;
+		}
+
+		if ( this.isMapOnly ) {
+			// Widget carte seule (page d'accueil) : on garde toujours la vue
+			// France par défaut plutôt que d'ajuster sur les bureaux, pour un
+			// cadrage stable quel que soit le nombre de bureaux ou un éventuel
+			// bureau outre-mer/mal géocodé.
+			return;
 		}
 
 		if ( this.userLocation ) {
