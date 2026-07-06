@@ -28,6 +28,11 @@ class Settings {
 				'url'         => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 			),
+			'osm_france'     => array(
+				'label'       => __( 'OpenStreetMap France (libellés en français)', 'chambersign-office-locator' ),
+				'url'         => 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+				'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &mdash; rendu <a href="https://www.openstreetmap.fr/">OSM France</a>',
+			),
 			'carto_voyager'  => array(
 				'label'       => __( 'CartoDB Voyager (couleurs douces)', 'chambersign-office-locator' ),
 				'url'         => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',

@@ -66,7 +66,7 @@ Si un bureau n'a pas de latitude/longitude, un bouton **Géocoder depuis l'adres
 
 Depuis **ChamberSign Locator > Réglages** :
 - Position par défaut de la carte (latitude/longitude) et niveaux de zoom appliqués (France, région, département, sélection d'un bureau).
-- Fond de carte : OpenStreetMap standard, ou CartoDB Voyager/Positron/Dark Matter (tuiles libres, sans clé API).
+- Fond de carte : OpenStreetMap standard, OpenStreetMap France (libellés en français), ou CartoDB Voyager/Positron/Dark Matter (tuiles libres, sans clé API).
 - Icône personnalisée du marqueur (SVG, 100 Ko max) en remplacement du pin par défaut.
 
 ## Structure du projet

@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.4.3 =
+* Ajout d'un fond de carte "OpenStreetMap France" dans Réglages > Apparence, avec libellés (villes, régions...) en français. Les fonds CartoDB Voyager/Positron/Dark Matter affichent en effet certains libellés (notamment les noms de régions) traduits en anglais par leur fournisseur ; ce nouveau fond utilise les données OpenStreetMap en français.
 
 = 1.4.2 =
 * Correction : le widget carte seule (`[chambersign_locator_map]`) recadrait la carte sur l'ensemble des bureaux affichés (parfois plus large ou plus étroit que la France selon leur répartition). Il conserve désormais toujours le cadrage France par défaut réglé dans Réglages, quel que soit le nombre de bureaux.
