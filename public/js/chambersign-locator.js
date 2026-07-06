@@ -164,12 +164,6 @@
 		this.userLocation = null;
 		this.userMarker = null;
 
-		// Mode "carte seule" ([chambersign_locator_map]) : pas de recherche/
-		// liste, et la vue reste fixée sur la France plutôt que de zoomer
-		// automatiquement sur les résultats (immunise ce widget contre un
-		// éventuel bureau mal géocodé).
-		this.autoFitBounds = ! root.classList.contains( 'csol-locator-map-only' );
-
 		this.initMap();
 		this.bindFilters();
 		this.bindGeoloc();
@@ -188,6 +182,14 @@
 			maxZoom: 19,
 			attribution: tile.attribution || '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		} ).addTo( this.map );
+
+		// Retire uniquement la mention "Leaflet" (auto-promotion de la
+		// librairie, pas une obligation) : l'attribution du fond de carte
+		// (OpenStreetMap/CARTO) reste affichée, elle est exigée par leurs
+		// conditions d'utilisation gratuite.
+		if ( this.map.attributionControl ) {
+			this.map.attributionControl.setPrefix( false );
+		}
 
 		var hasClustering = typeof L.markerClusterGroup === 'function';
 
@@ -324,7 +326,9 @@
 	CsolLocatorInstance.prototype.search = function () {
 		var self = this;
 
-		this.listEl.innerHTML = '<p class="csol-list-loading">' + escapeHtml( csolLocator.i18n.loading ) + '</p>';
+		if ( this.listEl ) {
+			this.listEl.innerHTML = '<p class="csol-list-loading">' + escapeHtml( csolLocator.i18n.loading ) + '</p>';
+		}
 
 		var formData = new FormData();
 		formData.append( 'action', csolLocator.action );
@@ -402,19 +406,17 @@
 			this.listEl.innerHTML = listHtml;
 		}
 
-		if ( this.autoFitBounds ) {
-			if ( this.userLocation ) {
-				// En mode "Autour de moi", on centre/zoome sur la position de
-				// l'utilisateur plutôt que d'englober tous les résultats : avec
-				// 144 bureaux à travers la France, un fitBounds sur l'ensemble
-				// zoomerait beaucoup trop large (et serait faussé par le moindre
-				// bureau mal géocodé). La liste reste triée par distance.
-				this.map.flyTo( [ this.userLocation.lat, this.userLocation.lng ], this.settings.zoomDepartement );
-			} else if ( bounds.length > 1 ) {
-				this.map.fitBounds( bounds, { padding: [ 30, 30 ], maxZoom: this.settings.zoomRegion } );
-			} else if ( 1 === bounds.length ) {
-				this.map.setView( bounds[ 0 ], this.settings.zoomDepartement );
-			}
+		if ( this.userLocation ) {
+			// En mode "Autour de moi", on centre/zoome sur la position de
+			// l'utilisateur plutôt que d'englober tous les résultats : avec
+			// 144 bureaux à travers la France, un fitBounds sur l'ensemble
+			// zoomerait beaucoup trop large (et serait faussé par le moindre
+			// bureau mal géocodé). La liste reste triée par distance.
+			this.map.flyTo( [ this.userLocation.lat, this.userLocation.lng ], this.settings.zoomDepartement );
+		} else if ( bounds.length > 1 ) {
+			this.map.fitBounds( bounds, { padding: [ 30, 30 ], maxZoom: this.settings.zoomRegion } );
+		} else if ( 1 === bounds.length ) {
+			this.map.setView( bounds[ 0 ], this.settings.zoomDepartement );
 		}
 
 		if ( this.listEl ) {

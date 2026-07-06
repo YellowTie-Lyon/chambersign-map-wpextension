@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,11 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.4.1 =
+* Correction : le widget carte seule (`[chambersign_locator_map]`) ne récupérait jamais les bureaux car le script tentait de mettre à jour la liste des résultats, absente dans ce mode, provoquant une erreur silencieuse avant même l'appel AJAX.
+* Correction : le widget carte seule s'ouvrait sur une vue trop large (Europe/Moyen-Orient) au lieu d'être cadré sur la France ; la carte s'ajuste maintenant à nouveau automatiquement à l'ensemble des bureaux, comme la carte complète.
+* Discrétion des mentions légales du fond de carte (bas à droite) : suppression du préfixe "Leaflet" et réduction visuelle du bandeau. Les mentions OpenStreetMap/CARTO restent affichées, leur suppression totale n'étant pas autorisée par la licence d'utilisation gratuite de ces fonds de carte.
 
 = 1.4.0 =
 * Ajout du shortcode `[chambersign_locator_map]` : carte seule (sans recherche ni liste), centrée sur la France, bureaux en clusters cliquables. Idéal pour une page d'accueil ou un widget.

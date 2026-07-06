@@ -301,6 +301,15 @@
 	line-height: 1.5;
 }
 
+/* Attribution du fond de carte : conservée (exigée par OpenStreetMap/CARTO
+   pour un usage gratuit), mais discrète. */
+.csol-map .leaflet-control-attribution {
+	font-size: 10px;
+	line-height: 1.4;
+	padding: 1px 6px;
+	background: rgba(255, 255, 255, 0.75);
+}
+
 /* Responsive : tablette et mobile */
 
 @media (max-width: 960px) {
