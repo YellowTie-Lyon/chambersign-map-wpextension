@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.3.3 =
+* Correction import CSV : un fichier enregistré en "UTF-8 avec BOM" (comportement par défaut d'Excel) faisait échouer la reconnaissance de la toute première colonne d'en-tête, quelle qu'elle soit. Le BOM est désormais ignoré à la lecture des en-têtes.
 
 = 1.3.2 =
 * Correction : le bouton "Autour de moi" n'était pas aligné visuellement avec le reste de la barre de filtres (hauteur différente à cause d'un conflit de spécificité CSS).

@@ -172,6 +172,10 @@ class Import {
 	 * Normalise un en-tête de colonne (minuscule, sans accents).
 	 */
 	private function normalize_header( string $header ): string {
+		// Excel enregistre souvent les CSV en "UTF-8 avec BOM" : ces 3 octets
+		// se retrouvent collés au tout premier en-tête et l'empêchent de
+		// correspondre à COLUMN_MAP (seule cette colonne était affectée).
+		$header = preg_replace( '/^\xEF\xBB\xBF/', '', $header );
 		$header = remove_accents( trim( $header ) );
 
 		return strtolower( $header );
