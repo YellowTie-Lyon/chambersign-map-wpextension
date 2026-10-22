@@ -2,7 +2,6 @@
 namespace ChamberSign\Locator\Front;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,17 +30,7 @@ class Shortcode {
 	public function render(): string {
 		( new Assets() )->enqueue();
 
-		$regions  = $this->get_distinct_meta_values( 'region' );
-		$produits = get_terms(
-			array(
-				'taxonomy'   => Produit::TAXONOMY,
-				'hide_empty' => true,
-			)
-		);
-
-		if ( is_wp_error( $produits ) ) {
-			$produits = array();
-		}
+		$regions = $this->get_distinct_meta_values( 'region' );
 
 		ob_start();
 		require CSOL_PLUGIN_DIR . 'public/views/locator-template.php';

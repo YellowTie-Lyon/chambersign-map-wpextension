@@ -4,7 +4,6 @@
  * [chambersign_locator].
  *
  * @var array<int, string>     $regions
- * @var array<int, \WP_Term>   $produits
  * @package ChamberSign\Locator
  */
 
@@ -47,17 +46,6 @@ $csol_id = 'csol-locator-' . $csol_instance;
 			</select>
 		</div>
 
-		<div class="csol-filter">
-			<label for="<?php echo esc_attr( $csol_id ); ?>-produit" class="screen-reader-text">
-				<?php esc_html_e( 'Produit', 'chambersign-office-locator' ); ?>
-			</label>
-			<select id="<?php echo esc_attr( $csol_id ); ?>-produit" class="csol-select csol-filter-produit">
-				<option value=""><?php esc_html_e( 'Tous les produits', 'chambersign-office-locator' ); ?></option>
-				<?php foreach ( $produits as $produit ) : ?>
-					<option value="<?php echo esc_attr( $produit->slug ); ?>"><?php echo esc_html( $produit->name ); ?></option>
-				<?php endforeach; ?>
-			</select>
-		</div>
 	</div>
 
 	<p class="csol-geoloc-status" id="<?php echo esc_attr( $csol_id ); ?>-geoloc-status" aria-live="polite"></p>

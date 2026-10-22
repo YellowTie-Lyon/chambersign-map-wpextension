@@ -4,7 +4,7 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Fonctionnalités :
 * Custom Post Type "Bureaux d'enregistrement" avec coordonnées GPS, coordonnées de contact et statut actif/inactif.
 * Taxonomie "Produits" (RGS, eIDAS, Signature Électronique, Cachet Serveur…) en relation many-to-many avec les bureaux.
 * Carte interactive OpenStreetMap (Leaflet), sans dépendance à Google Maps, avec regroupement automatique des bureaux proches (Leaflet.markercluster).
-* Recherche AJAX (texte libre, région, produit) sans rechargement de page, avec géolocalisation "Autour de moi" (tri par distance).
+* Recherche AJAX (texte libre, région) sans rechargement de page, avec géolocalisation "Autour de moi" (tri par distance).
 * Import/mise à jour en masse des bureaux depuis un fichier CSV ou XLSX.
 * Aide au géocodage (Nominatim/OpenStreetMap) dans l'administration.
 * Réglages de la carte (position, zooms par défaut, fond de carte, icône du marqueur) via l'API Settings de WordPress.
@@ -52,6 +52,9 @@ Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, A
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.4.4 =
+* Suppression du filtre "Tous les produits" de la barre de recherche (texte libre, région et "Autour de moi" suffisent).
 
 = 1.4.3 =
 * Ajout d'un fond de carte "OpenStreetMap France" dans Réglages > Apparence, avec libellés (villes, régions...) en français. Les fonds CartoDB Voyager/Positron/Dark Matter affichent en effet certains libellés (notamment les noms de régions) traduits en anglais par leur fournisseur ; ce nouveau fond utilise les données OpenStreetMap en français.

@@ -155,7 +155,6 @@
 		this.countEl = document.getElementById( this.id + '-count' );
 		this.searchInput = root.querySelector( '.csol-search-input' );
 		this.regionSelect = root.querySelector( '.csol-filter-region' );
-		this.produitSelect = root.querySelector( '.csol-filter-produit' );
 		this.geolocButton = root.querySelector( '.csol-geoloc-button' );
 		this.geolocStatusEl = document.getElementById( this.id + '-geoloc-status' );
 
@@ -218,11 +217,6 @@
 		}
 		if ( this.regionSelect ) {
 			this.regionSelect.addEventListener( 'change', function () {
-				self.search();
-			} );
-		}
-		if ( this.produitSelect ) {
-			this.produitSelect.addEventListener( 'change', function () {
 				self.search();
 			} );
 		}
@@ -336,7 +330,6 @@
 		formData.append( 'nonce', csolLocator.nonce );
 		formData.append( 'search', this.searchInput ? this.searchInput.value : '' );
 		formData.append( 'region', this.regionSelect ? this.regionSelect.value : '' );
-		formData.append( 'produit', this.produitSelect ? this.produitSelect.value : '' );
 
 		fetch( csolLocator.ajaxUrl, {
 			method: 'POST',
@@ -443,8 +436,7 @@
 		}
 
 		var hasActiveFilters = ( this.searchInput && this.searchInput.value )
-			|| ( this.regionSelect && this.regionSelect.value )
-			|| ( this.produitSelect && this.produitSelect.value );
+			|| ( this.regionSelect && this.regionSelect.value );
 
 		var html = '<p class="csol-list-empty">' + escapeHtml( csolLocator.i18n.noResults ) + '</p>';
 
@@ -469,9 +461,6 @@
 		}
 		if ( this.regionSelect ) {
 			this.regionSelect.value = '';
-		}
-		if ( this.produitSelect ) {
-			this.produitSelect.value = '';
 		}
 		this.search();
 	};
