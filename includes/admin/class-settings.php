@@ -277,7 +277,7 @@ class Settings {
 	public function render_uninstall_section_intro(): void {
 		?>
 		<p>
-			<?php esc_html_e( 'Par défaut, désinstaller l\'extension (Extensions > Supprimer) conserve tous vos bureaux, produits et réglages : vous pouvez la réinstaller sans rien reperdre. Cochez l\'option ci-dessous uniquement si vous voulez que la désinstallation efface définitivement ces données.', 'chambersign-office-locator' ); ?>
+			<?php esc_html_e( 'Par défaut, désinstaller l\'extension (Extensions > Supprimer) conserve tous vos bureaux et réglages : vous pouvez la réinstaller sans rien reperdre. Cochez l\'option ci-dessous uniquement si vous voulez que la désinstallation efface définitivement ces données.', 'chambersign-office-locator' ); ?>
 		</p>
 		<?php
 	}
@@ -297,7 +297,7 @@ class Settings {
 				value="1"
 				<?php checked( $checked ); ?>
 			/>
-			<?php esc_html_e( 'Supprimer définitivement les bureaux, produits et réglages lorsque l\'extension est désinstallée.', 'chambersign-office-locator' ); ?>
+			<?php esc_html_e( 'Supprimer définitivement les bureaux et réglages lorsque l\'extension est désinstallée.', 'chambersign-office-locator' ); ?>
 		</label>
 		<p class="description"><?php esc_html_e( 'Décoché par défaut. Cette action est irréversible et n\'a aucun rapport avec le fait de désactiver l\'extension.', 'chambersign-office-locator' ); ?></p>
 		<?php

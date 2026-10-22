@@ -6,7 +6,6 @@
  */
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,7 +17,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 $bureaux_count = wp_count_posts( Bureau::POST_TYPE );
 $total_bureaux = isset( $bureaux_count->publish ) ? (int) $bureaux_count->publish : 0;
-$total_produits = wp_count_terms( array( 'taxonomy' => Produit::TAXONOMY, 'hide_empty' => false ) );
 ?>
 <div class="wrap csol-admin-wrap">
 	<h1><?php esc_html_e( 'ChamberSign Locator', 'chambersign-office-locator' ); ?></h1>
@@ -29,11 +27,6 @@ $total_produits = wp_count_terms( array( 'taxonomy' => Produit::TAXONOMY, 'hide_
 			<span class="csol-dashboard-card-number"><?php echo esc_html( $total_bureaux ); ?></span>
 			<span class="csol-dashboard-card-label"><?php esc_html_e( 'Bureaux publiés', 'chambersign-office-locator' ); ?></span>
 			<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Bureau::POST_TYPE ) ); ?>"><?php esc_html_e( 'Voir les bureaux', 'chambersign-office-locator' ); ?></a>
-		</div>
-		<div class="csol-dashboard-card">
-			<span class="csol-dashboard-card-number"><?php echo esc_html( is_wp_error( $total_produits ) ? 0 : $total_produits ); ?></span>
-			<span class="csol-dashboard-card-label"><?php esc_html_e( 'Produits', 'chambersign-office-locator' ); ?></span>
-			<a href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=' . Produit::TAXONOMY . '&post_type=' . Bureau::POST_TYPE ) ); ?>"><?php esc_html_e( 'Voir les produits', 'chambersign-office-locator' ); ?></a>
 		</div>
 		<div class="csol-dashboard-card">
 			<span class="csol-dashboard-card-number">&rarr;</span>

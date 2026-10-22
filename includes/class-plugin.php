@@ -2,7 +2,6 @@
 namespace ChamberSign\Locator;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 use ChamberSign\Locator\Admin\Admin_Menu;
 use ChamberSign\Locator\Admin\Settings;
 use ChamberSign\Locator\Admin\Meta_Boxes;
@@ -53,7 +52,6 @@ final class Plugin {
 		load_plugin_textdomain( 'chambersign-office-locator', false, dirname( CSOL_PLUGIN_BASENAME ) . '/languages' );
 
 		( new Bureau() )->register_hooks();
-		( new Produit() )->register_hooks();
 
 		if ( is_admin() ) {
 			( new Admin_Menu() )->register_hooks();

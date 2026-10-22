@@ -2,15 +2,14 @@
 namespace ChamberSign\Locator\Ajax;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Recherche AJAX des bureaux (texte libre, région, département, produit),
- * disponible pour les visiteurs non connectés (wp_ajax_nopriv).
+ * Recherche AJAX des bureaux (texte libre, région, département), disponible
+ * pour les visiteurs non connectés (wp_ajax_nopriv).
  */
 class Search {
 
@@ -33,7 +32,6 @@ class Search {
 		$search      = isset( $_POST['search'] ) ? sanitize_text_field( wp_unslash( $_POST['search'] ) ) : '';
 		$region      = isset( $_POST['region'] ) ? sanitize_text_field( wp_unslash( $_POST['region'] ) ) : '';
 		$departement = isset( $_POST['departement'] ) ? sanitize_text_field( wp_unslash( $_POST['departement'] ) ) : '';
-		$produit     = isset( $_POST['produit'] ) ? sanitize_title( wp_unslash( $_POST['produit'] ) ) : '';
 
 		$meta_query = array( 'relation' => 'AND' );
 
@@ -74,16 +72,6 @@ class Search {
 			'orderby'                => 'title',
 			'order'                  => 'ASC',
 		);
-
-		if ( '' !== $produit ) {
-			$args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-				array(
-					'taxonomy' => Produit::TAXONOMY,
-					'field'    => 'slug',
-					'terms'    => $produit,
-				),
-			);
-		}
 
 		$search_filter = null;
 
@@ -162,18 +150,6 @@ class Search {
 		$lat = (float) get_post_meta( $post->ID, Bureau::META_PREFIX . 'latitude', true );
 		$lng = (float) get_post_meta( $post->ID, Bureau::META_PREFIX . 'longitude', true );
 
-		$terms    = get_the_terms( $post->ID, Produit::TAXONOMY );
-		$produits = array();
-
-		if ( is_array( $terms ) ) {
-			foreach ( $terms as $term ) {
-				$produits[] = array(
-					'name' => $term->name,
-					'slug' => $term->slug,
-				);
-			}
-		}
-
 		return array(
 			'id'          => $post->ID,
 			// Titre brut (non filtré) : get_the_title() applique wptexturize et
@@ -190,7 +166,6 @@ class Search {
 			'horaires'    => get_post_meta( $post->ID, Bureau::META_PREFIX . 'horaires', true ),
 			'lat'         => $lat,
 			'lng'         => $lng,
-			'produits'    => $produits,
 		);
 	}
 }

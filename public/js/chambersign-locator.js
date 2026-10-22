@@ -479,15 +479,6 @@
 	};
 
 	CsolLocatorInstance.prototype.buildCardHtml = function ( bureau ) {
-		var produitsHtml = '';
-		if ( bureau.produits && bureau.produits.length ) {
-			produitsHtml = '<div class="csol-card-produits">';
-			bureau.produits.forEach( function ( produit ) {
-				produitsHtml += '<span class="csol-badge-produit">' + escapeHtml( produit.name ) + '</span>';
-			} );
-			produitsHtml += '</div>';
-		}
-
 		var siteHtml = '';
 		if ( bureau.site ) {
 			siteHtml = '<a href="' + escapeAttr( bureau.site ) + '" class="csol-card-link" target="_blank" rel="noopener noreferrer">' + escapeHtml( siteLabel( bureau.site ) ) + '</a>';
@@ -513,7 +504,6 @@
 				'<p class="csol-card-location">' + escapeHtml( bureau.ville ) + ( bureau.region ? ' &middot; ' + escapeHtml( bureau.region ) : '' ) + distanceHtml + '</p>' +
 				( bureau.adresse ? '<p class="csol-card-adresse">' + escapeHtml( bureau.adresse ) + '</p>' : '' ) +
 				contactHtml +
-				produitsHtml +
 				'<div class="csol-card-actions">' +
 					'<button type="button" class="csol-btn csol-btn-primary csol-card-view" data-bureau-id="' + bureau.id + '">' + escapeHtml( csolLocator.i18n.viewOnMap ) + '</button>' +
 				'</div>' +

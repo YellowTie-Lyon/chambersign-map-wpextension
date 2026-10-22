@@ -2,7 +2,6 @@
 namespace ChamberSign\Locator\Admin;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 use Shuchkin\SimpleXLSX;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -41,8 +40,6 @@ class Import {
 		'longitude'      => 'longitude',
 		'lng'            => 'longitude',
 		'lon'            => 'longitude',
-		'produits'       => 'produits',
-		'produit'        => 'produits',
 	);
 
 	/**
@@ -267,11 +264,6 @@ class Import {
 
 			if ( ! get_post_meta( $post_id, Bureau::META_PREFIX . 'actif', true ) ) {
 				update_post_meta( $post_id, Bureau::META_PREFIX . 'actif', '1' );
-			}
-
-			if ( ! empty( $row['produits'] ) ) {
-				$produits = array_filter( array_map( 'trim', preg_split( '/[,|]/', $row['produits'] ) ) );
-				wp_set_object_terms( $post_id, $produits, Produit::TAXONOMY, false );
 			}
 		}
 

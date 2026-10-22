@@ -2,7 +2,6 @@
 namespace ChamberSign\Locator\Admin;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,7 +21,7 @@ class List_Columns {
 	}
 
 	/**
-	 * Ajoute les colonnes ville, région, produits et statut.
+	 * Ajoute les colonnes ville, région et statut.
 	 *
 	 * @param array<string, string> $columns Colonnes existantes.
 	 *
@@ -37,7 +36,6 @@ class List_Columns {
 			if ( 'title' === $key ) {
 				$new_columns['csol_ville']    = __( 'Ville', 'chambersign-office-locator' );
 				$new_columns['csol_region']   = __( 'Région', 'chambersign-office-locator' );
-				$new_columns['csol_produits'] = __( 'Produits', 'chambersign-office-locator' );
 				$new_columns['csol_actif']    = __( 'Statut', 'chambersign-office-locator' );
 			}
 		}
@@ -59,15 +57,6 @@ class List_Columns {
 
 			case 'csol_region':
 				echo esc_html( get_post_meta( $post_id, Bureau::META_PREFIX . 'region', true ) );
-				break;
-
-			case 'csol_produits':
-				$terms = get_the_terms( $post_id, Produit::TAXONOMY );
-				if ( is_array( $terms ) && ! empty( $terms ) ) {
-					echo esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) );
-				} else {
-					echo '&#8212;';
-				}
 				break;
 
 			case 'csol_actif':

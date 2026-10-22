@@ -2,7 +2,6 @@
 namespace ChamberSign\Locator\Admin;
 
 use ChamberSign\Locator\Cpt\Bureau;
-use ChamberSign\Locator\Taxonomy\Produit;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,14 +50,6 @@ class Admin_Menu {
 			__( 'Bureaux d\'enregistrement', 'chambersign-office-locator' ),
 			'manage_options',
 			'edit.php?post_type=' . Bureau::POST_TYPE
-		);
-
-		add_submenu_page(
-			self::MENU_SLUG,
-			__( 'Produits', 'chambersign-office-locator' ),
-			__( 'Produits', 'chambersign-office-locator' ),
-			'manage_options',
-			'edit-tags.php?taxonomy=' . Produit::TAXONOMY . '&post_type=' . Bureau::POST_TYPE
 		);
 
 		add_submenu_page(

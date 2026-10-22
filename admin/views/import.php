@@ -81,11 +81,11 @@ wp_localize_script(
 			</tr>
 		</thead>
 		<tbody>
-			<tr><td>Région, Nom du bureau, Adresse, Téléphone, Site internet, Latitude, Longitude, Produits</td></tr>
+			<tr><td>Région, Nom du bureau, Adresse, Téléphone, Site internet, Latitude, Longitude</td></tr>
 		</tbody>
 	</table>
 	<p class="description">
-		<?php esc_html_e( 'Les colonnes Département, Ville, Code postal et Horaires sont également reconnues si présentes. La colonne "Produits" accepte plusieurs valeurs séparées par une virgule ou un "|". Un bureau existant portant le même nom est mis à jour plutôt que dupliqué.', 'chambersign-office-locator' ); ?>
+		<?php esc_html_e( 'Les colonnes Département, Ville, Code postal et Horaires sont également reconnues si présentes. Un bureau existant portant le même nom est mis à jour plutôt que dupliqué.', 'chambersign-office-locator' ); ?>
 	</p>
 
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">

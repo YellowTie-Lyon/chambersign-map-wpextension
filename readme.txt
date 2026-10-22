@@ -4,11 +4,11 @@ Tags: locator, map, leaflet, openstreetmap, certificat
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Localisateur de bureaux d'enregistrement ChamberSign, avec carte OpenStreetMap/Leaflet, recherche AJAX et gestion des bureaux/produits.
+Localisateur de bureaux d'enregistrement ChamberSign, avec carte OpenStreetMap/Leaflet, recherche AJAX et gestion des bureaux.
 
 == Description ==
 
@@ -17,7 +17,6 @@ ChamberSign Office Locator permet aux visiteurs du site ChamberSign de trouver l
 Fonctionnalités :
 
 * Custom Post Type "Bureaux d'enregistrement" avec coordonnées GPS, coordonnées de contact et statut actif/inactif.
-* Taxonomie "Produits" (RGS, eIDAS, Signature Électronique, Cachet Serveur…) en relation many-to-many avec les bureaux.
 * Carte interactive OpenStreetMap (Leaflet), sans dépendance à Google Maps, avec regroupement automatique des bureaux proches (Leaflet.markercluster).
 * Recherche AJAX (texte libre, région) sans rechargement de page, avec géolocalisation "Autour de moi" (tri par distance).
 * Import/mise à jour en masse des bureaux depuis un fichier CSV ou XLSX.
@@ -31,9 +30,8 @@ Fonctionnalités :
 1. Copiez le dossier `chambersign-office-locator` dans `wp-content/plugins/`, ou installez le fichier ZIP depuis Extensions > Ajouter.
 2. Activez le plugin.
 3. Dans le menu "ChamberSign Locator", ajoutez vos bureaux d'enregistrement (ou importez-les via l'écran Import).
-4. Assignez les produits proposés par chaque bureau.
-5. Ajustez éventuellement les réglages de la carte dans "ChamberSign Locator > Réglages".
-6. Insérez le shortcode `[chambersign_locator]` sur la page de votre choix (éditeur classique, éditeur de blocs, ou widget Shortcode Elementor).
+4. Ajustez éventuellement les réglages de la carte dans "ChamberSign Locator > Réglages".
+5. Insérez le shortcode `[chambersign_locator]` sur la page de votre choix (éditeur classique, éditeur de blocs, ou widget Shortcode Elementor).
 
 == Shortcode ==
 
@@ -47,11 +45,14 @@ Carte seule (sans recherche ni liste), centrée sur la France, bureaux en cluste
 
 == Import CSV/XLSX ==
 
-Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, Adresse, Téléphone, Site internet, Horaires, Latitude, Longitude, Produits (séparés par une virgule ou un "|").
+Colonnes reconnues : Région, Nom du bureau, Département, Ville, Code postal, Adresse, Téléphone, Site internet, Horaires, Latitude, Longitude.
 
 Un bureau existant portant le même nom est mis à jour ; sinon un nouveau bureau est créé.
 
 == Changelog ==
+
+= 1.4.5 =
+* Suppression complète de la fonctionnalité Produits (taxonomie, sous-menu admin, colonne et badge "Produits", carte du tableau de bord, colonne d'import CSV/XLSX, filtre et champ de la recherche AJAX). Les données déjà enregistrées ne sont pas supprimées, seule leur utilisation dans l'extension est retirée.
 
 = 1.4.4 =
 * Suppression du filtre "Tous les produits" de la barre de recherche (texte libre, région et "Autour de moi" suffisent).

@@ -13,4 +13,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>
 	<code style="font-size: 14px; padding: 6px 10px; background: #EFEFEF; border-radius: 4px; display: inline-block;">[chambersign_locator]</code>
 </p>
-<p><?php esc_html_e( 'Ce shortcode affiche une carte OpenStreetMap et la liste des bureaux, avec une recherche par texte libre, région, département et produit. Il fonctionne dans l\'éditeur classique, l\'éditeur de blocs et dans un widget Shortcode Elementor.', 'chambersign-office-locator' ); ?></p>
+<p><?php esc_html_e( 'Ce shortcode affiche une carte OpenStreetMap et la liste des bureaux, avec une recherche par texte libre et par région. Il fonctionne dans l\'éditeur classique, l\'éditeur de blocs et dans un widget Shortcode Elementor.', 'chambersign-office-locator' ); ?></p>
